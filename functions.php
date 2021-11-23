@@ -101,10 +101,14 @@ function returnTo($previousPage, $form = false){
  * Erstellt eine abfrage zur Auswahl des Blocks
  * @return void
  */
-function chooseBlockType($postTo, $previousPage = false) {
+function chooseBlockType($postTo, $previousPage = false, $customLabel = false) {
     startForm("post","$postTo");
 
-    echo"<label>Für welchen Block ist die Frage?:<br>";
+    if ($customLabel == false) {
+        echo "<label>Für welchen Block ist die Frage?:<br>";
+    } else {
+        echo "<label>$customLabel<br>";
+    }
 
     echo"<input type=\"radio\" name=\"block\" value=\"1\" required> Block 1 - Schätzfragen<br>"; // eine Antwort
     echo"<input type=\"radio\" name=\"block\" value=\"2\" required> Block 2 - Buzzerfragen<br> "; //
@@ -248,8 +252,7 @@ function checkImage($block, $nameQuestion){
     $namedArray = [];
 
     foreach ($workingArray as $value){
-        $name = str_replace($dir, '',$value);
-        $name = str_replace("/",'',$name);
+        $name = str_replace($dir."/", '',$value);
         $name = preg_replace("/[.].+/", '', $name);
         $tmpArray = [$name => $value];
         array_push($namedArray, $tmpArray);
