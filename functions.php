@@ -264,3 +264,31 @@ function checkImage($block, $nameQuestion){
 
 
 }
+
+function winnerResult($winner1,$winner2 = false ){
+    if($winner2==false){
+        if($winner1==1) {
+            echo"<h1 style = 'background-color:MediumSeaGreen;' > Player 1 </h1 >
+                 <h1 style = 'background-color:Tomato;' > Player 2 </h1 >";
+        }elseif($winner1==2) {
+            echo"<h1 style = 'background-color:Tomato;' > Player 1 </h1 >
+                 <h1 style = 'background-color:MediumSeaGreen;' > Player 2 </h1 >";
+        }
+    }else {
+        echo "<h1 style = 'background-color:MediumSeaGreen;' > Player 1 </h1 >
+         <h1 style = 'background-color:MediumSeaGreen;' > Player 2 </h1 >";
+    }
+}
+
+function winnerCalc($answerFile){
+    $answers = json_decode($answerFile);
+    $anwersPlayer1 = $answers["Player1"];
+    $answersPlayer2 = $answers["Player2"];
+    if($anwersPlayer1==$answers["Answer"] && $answersPlayer2==$answers["Answer"]){
+        winnerResult(1,2);
+    }elseif($anwersPlayer1==$answers["Answer"]){
+        winnerResult(1);
+    }elseif($answersPlayer2==$answers["Answer"]){
+        winnerResult(2);
+    }
+}
