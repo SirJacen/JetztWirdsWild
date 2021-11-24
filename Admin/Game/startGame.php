@@ -15,4 +15,4 @@ $playedBlocks = [];
 array_push($playedBlocks, $chosenBlock);
 file_put_contents($playedBlocksFile,json_encode($playedBlocks));
 
-header("Location: ../gameAdminView.php");
+header("Location: gameAdminView.php");

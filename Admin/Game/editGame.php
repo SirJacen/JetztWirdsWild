@@ -10,7 +10,7 @@ if (isset($_POST['end'])){
               Sind Sie sicher?</h1>
               <form>
               <button formmethod='post' name='delete' value='true' formaction='editGame.php'>JA, Spiel beenden!</button>
-              <button formmethod='post' formaction='../gameAdminView.php'>NEIN, Zurück!</button>
+              <button formmethod='post' formaction='gameAdminView.php'>NEIN, Zurück!</button>
               </form>";
     closeSide();
 } elseif (isset($_POST['delete'])){
@@ -25,17 +25,15 @@ if (isset($_POST['end'])){
     foreach ($runningGame as $element){
         unlink($element);
     }
-    header("Location:../gameAdminView.php");
+    header("Location:gameAdminView.php");
 } elseif (isset($_POST['bearbeiten'])){
     openSide();
     echo "<h1>Laufendes Spiel bearbeiten</h1>";
     queueNextBlock();
-    //echo "<form><button type='submit' formaction='../gameAdminView.php'>Zurück</button> </form>";
     closeSide();
 }
 
 function queueNextBlock(){
-    echo "<h2>Nächsten Block wählen</h2>";
     $root = $_SERVER['DOCUMENT_ROOT'];
     $compareArray = ["1","2","3","4"];
     $runningGameDir = $root."/Bloecke/runningGame/currentGame.json";
@@ -49,7 +47,14 @@ function queueNextBlock(){
         }
     }
 
-    if (isset($compareArray['0']) || isset($compareArray['1']) || isset($compareArray['2']) || isset($compareArray['3'])){
+    if (empty($compareArray)){
+        echo "<h2>Alle Blöcke wurden gespielt! Beende das Spiel, um von vorne zu starten.</h2><br>
+              <form>
+              <button formmethod='post' name='end' value='true' formaction='editGame.php'>Spiel beenden</button>
+              <button type='submit' formaction='gameAdminView.php'>Zurück</button>
+              </form>";
+    }else {
+        echo "<h2>Nächsten Block wählen</h2>";
         startForm("post", "editGame.php");
         foreach ($compareArray as $index){
             if ($index == "1"){
@@ -65,10 +70,7 @@ function queueNextBlock(){
             }
             echo "<input type='radio' name='block' value='$index' required> Block $index - $question<br>";
         }
-        closeForm("bearbeitet", "Speichern", "../gameAdminView.php");
-    }else {
-        echo "<h2>Alle Blöcke wurden gespielt! Beende das Spiel, um von vorne zu starten.</h2><br>
-              <form><button type='submit' formaction='../gameAdminView.php'>Zurück</button></form>";
+        closeForm("bearbeitet", "Speichern", "gameAdminView.php");
     }
 
 }
@@ -82,5 +84,5 @@ if (isset($_POST['block'])){
     $tmpArray = json_decode(file_get_contents($root."/Bloecke/runningGame/currentGame.json"),true);
     array_push($tmpArray, $_POST['block']);
     file_put_contents($root."/Bloecke/runningGame/currentGame.json",json_encode($tmpArray));
-    header("Location: ../gameAdminView.php");
+    header("Location: gameAdminView.php");
 }
