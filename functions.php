@@ -110,13 +110,13 @@ function chooseBlockType($postTo, $previousPage = false, $customLabel = false) {
     if ($customLabel == false) {
         echo "<label>Für welchen Block ist die Frage?:<br>";
     } else {
-        echo "<label>$customLabel<br>";
+        echo "<label>$customLabel</label><br>";
     }
 
     echo"<input type=\"radio\" name=\"block\" value=\"1\" required> Block 1 - Schätzfragen<br>"; // eine Antwort
     echo"<input type=\"radio\" name=\"block\" value=\"2\" required> Block 2 - Buzzerfragen<br> "; //
     echo"<input type=\"radio\" name=\"block\" value=\"3\" required> Block 3 - Allgemeinfragen<br>"; //
-    echo"<input type=\"radio\" name=\"block\" value=\"4\" required> Block 4 - Aufzählgame<br></label>"; // chat
+    echo"<input type=\"radio\" name=\"block\" value=\"4\" required> Block 4 - Aufzählgame<br>"; // chat
 
     closeForm("questionType","Weiter", "$previousPage");
     echo "</div>";
@@ -228,16 +228,16 @@ function questionOverview($pathToRoot)
             $questionName = $item['questionName'];
             if (isset($item['answer'])) {
                 $questionAnswers = $item['answer'];
-                echo "<p>==> Frage $questionIndex: $questionName <br>=> $questionAnswers</p>";
+                echo "<p> Frage $questionIndex: $questionName <br>=> $questionAnswers</p>";
             } elseif (isset($item['answerA'])){
                 $questionAnswerA = $item['answerA'];
                 $questionAnswerB = $item['answerB'];
                 $questionAnswerC = $item['answerC'];
                 $questionAnswerD = $item['answerD'];
-                echo "<p>==> Frage $questionIndex: $questionName <br>=> A: $questionAnswerA,
+                echo "<p> Frage $questionIndex: $questionName <br>=> A: $questionAnswerA,
                       B: $questionAnswerB, C: $questionAnswerC, D: $questionAnswerD</p>";
             }else {
-                echo "<p>==> Frage $questionIndex: $questionName</p>";
+                echo "<p> Frage $questionIndex: $questionName</p>";
             }
             checkImage($newKey, $questionName, $pathToRoot);
         }

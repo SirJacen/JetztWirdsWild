@@ -6,12 +6,12 @@ debugging("nein");
 
 if (isset($_POST['end'])){
     openSide("..\..");
-        echo "<h1>Sie sind dabei das laufende Spiel zu beenden.<br>
+        echo "<div><h1>Sie sind dabei das laufende Spiel zu beenden.<br>
               Sind Sie sicher?</h1>
               <form>
-              <button formmethod='post' name='delete' value='true' formaction='editGame.php'>JA, Spiel beenden!</button>
-              <button formmethod='post' formaction='gameAdminView.php'>NEIN, Zurück!</button>
-              </form>";
+              <button class='btn btn-dark' formmethod='post' name='delete' value='true' formaction='editGame.php'>JA, Spiel beenden!</button>
+              <button class='btn btn-dark' formmethod='post' formaction='gameAdminView.php'>NEIN, Zurück!</button>
+              </form><div>";
     closeSide();
 } elseif (isset($_POST['delete'])){
     $runningGame=[];
@@ -27,9 +27,10 @@ if (isset($_POST['end'])){
     }
     header("Location:gameAdminView.php");
 } elseif (isset($_POST['bearbeiten'])){
-    openSide();
-    echo "<h1>Laufendes Spiel bearbeiten</h1>";
+    openSide("..\..");
+    echo "<div><h1>Laufendes Spiel bearbeiten</h1>";
     queueNextBlock();
+    echo "</div>";
     closeSide();
 }
 
@@ -50,8 +51,8 @@ function queueNextBlock(){
     if (empty($compareArray)){
         echo "<h2>Alle Blöcke wurden gespielt! Beende das Spiel, um von vorne zu starten.</h2><br>
               <form>
-              <button formmethod='post' name='end' value='true' formaction='editGame.php'>Spiel beenden</button>
-              <button type='submit' formaction='gameAdminView.php'>Zurück</button>
+              <button class='btn btn-dark' formmethod='post' name='end' value='true' formaction='editGame.php'>Spiel beenden</button>
+              <button class='btn btn-dark' type='submit' formaction='gameAdminView.php'>Zurück</button>
               </form>";
     }else {
         echo "<h2>Nächsten Block wählen</h2>";

@@ -57,9 +57,9 @@ function startGame(){
 function overwatchGame(){
     echo "
          <form>
-         <button formmethod='post' type='submit' name='bearbeiten' value='true' formaction='editGame.php'>Bearbeite das laufende Spiel</button>
-         <button formmethod='post' type='submit' name='end' value='true' formaction='editGame.php'>Beende das laufende Spiel</button>
-         <button formmethod='post' type='submit' formaction='../adminInterface.php'>Zurück</button>
+         <button class='btn btn-dark' formmethod='post' type='submit' name='bearbeiten' value='true' formaction='editGame.php'>Bearbeite das laufende Spiel</button>
+         <button class='btn btn-dark' formmethod='post' type='submit' name='end' value='true' formaction='editGame.php'>Beende das laufende Spiel</button>
+         <button class='btn btn-dark' formmethod='post' type='submit' formaction='../adminInterface.php'>Zurück</button>
          </form></div>
     ";
 }
