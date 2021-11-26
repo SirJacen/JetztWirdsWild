@@ -1,8 +1,8 @@
 <?php
 $root = $_SERVER['DOCUMENT_ROOT'];
 require_once "$root" . "/functions.php";
-define("ResultPath", $root . "/Quimaster/Ergebnisse/results.json");
-define("QuestionPath", $root . "/Quimaster/currentBlock/");
+define("ResultPath", "$root" . "/Quimaster/Ergebnisse/results.json");
+define("QuestionPath", "$root" . "/Quimaster/currentBlock/");
 
 openSide();
 debugging("ja");
@@ -34,6 +34,15 @@ function checkResult() :bool{
 }
 
 function splitQuestions(){
+    $block = 1;
+    $file = QuestionPath . "questionsB". "$block".".json";
+    while ($block<5){
+        if(file_exists($file)){
+            break;
+        }
+        $block++;
+    }
+    echo json_decode(file_get_contents($file),true);
     // JSON 1 Auslesen und die Fragen Aufteilen
     // erste Frage in neue JSON 2 packen
     // erste Frage aus JSON 1 löschen
