@@ -213,7 +213,7 @@ function questionAufzeahlfrage($array = false, $key = false){
  * Gibt alle aktuellen Fragen aus
  * @return void
  */
-function questionOverview()
+function questionOverview($pathToRoot)
 {
     $questionArray = [];
     $blockarray = ["1","2","3","4"];
@@ -239,16 +239,15 @@ function questionOverview()
             }else {
                 echo "<p>==> Frage $questionIndex: $questionName</p>";
             }
-            checkImage($newKey, $questionName);
+            checkImage($newKey, $questionName, $pathToRoot);
         }
         echo "</div>";
     }
 }
 
-function checkImage($block, $nameQuestion){
+function checkImage($block, $nameQuestion, $pathToRoot){
 
-    $root = $_SERVER['DOCUMENT_ROOT'];
-    $dir = "$root"."/Bloecke/"."$block";
+    $dir = "$pathToRoot"."/Bloecke/"."$block";
     $array = glob($dir . "/*.*");
     $nameJson = "$dir" . "/" . "questionsB" . "$block" . ".json";
     $keyJSON = array_search( $nameJson, $array );
@@ -265,7 +264,7 @@ function checkImage($block, $nameQuestion){
     $counter = 1;
     foreach ($namedArray as $item){
         if (isset($item[$nameQuestion])){
-            echo "<br>Bild $nameQuestion $counter:<img alt='$nameQuestion' src='$item[$nameQuestion]'>";
+            echo "<p>Bild $nameQuestion $counter:<br><img class='questionImages' alt='$nameQuestion' src='$item[$nameQuestion]'></p>";
             $counter ++;
         }
     }
@@ -286,7 +285,7 @@ function addQuicklinks($user, $pathIndicator = ".") {
         echo "<div class='link'><a class='btn btn-dark' href='$pathIndicator\Game\gameAdminView.php'>Game</a></div>";
         echo "<div class='link'><a class='btn btn-dark' href='$pathIndicator\..\index.php'>Log Out</a></div>";
     } elseif ($user == "Quizmaster"){
-
+        echo "TO DO";
     }
     echo "</div></section><br>";
 }

@@ -20,6 +20,6 @@ echo "<form><button class='btn btn-dark' type='submit' formaction='newQuestion.p
 returnTo("../adminInterface.php");
 echo "</form>";
 
-questionOverview();
+questionOverview("..\..");
 echo "</div>";
 closeSide();

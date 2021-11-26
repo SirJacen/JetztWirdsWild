@@ -80,3 +80,8 @@ div {
     border-color: darkgrey;
     padding: 10px;
 }
+
+.questionImages {
+    width: 100%;
+    height: auto;
+}
