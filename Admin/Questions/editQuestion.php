@@ -6,7 +6,7 @@ require_once "$root" . "/functions.php";
 debugging("nein");
 
 if($_POST['questionSelection'] == "Weiter"){ // Bearbeiten
-    openSide();
+    openSide("..\..");
     $jsonObject = openJSON($_POST['block']);
     switchBoard($jsonObject);
 
@@ -21,12 +21,12 @@ if($_POST['questionSelection'] == "Weiter"){ // Bearbeiten
 
 
 } elseif ($_POST['questionType'] == "Weiter"){ //Auswählen
-    openSide();
+    openSide("..\..");
     echo "Question Selection";
     createQuestionSelection(openJSON($_POST['block']));
 
 } else {
-    openSide();
+    openSide("..\..");
     echo "Choose Block";
     chooseBlockType("editQuestion.php", "questions.php");
 }

@@ -16,7 +16,7 @@ closeSide();
 
 function logInOverlay(){
     echo '
-<h2>JETZT WIRD\'S WILD!</h2>
+<h2 class="indexTitle">JETZT WIRD\'S WILD!</h2>
 <div id="id01" class="loginform">
 
     <form class="login" action="weiterleiter.php" method="post">
@@ -29,7 +29,7 @@ function logInOverlay(){
                 <label for="psw"><b>Password</b></label>
                 <input type="password" placeholder="Enter Password" name="psw" required>
 
-                <br><button type="submit">Login</button>
+                <br><button class="btn btn-dark btn-lrg" type="submit">Login</button>
 
             </div>
         </div>

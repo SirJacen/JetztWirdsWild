@@ -5,7 +5,7 @@ require_once "$root"."/functions.php";
 debugging("nein");
 
 if (isset($_POST['end'])){
-    openSide();
+    openSide("..\..");
         echo "<h1>Sie sind dabei das laufende Spiel zu beenden.<br>
               Sind Sie sicher?</h1>
               <form>

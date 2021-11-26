@@ -9,15 +9,17 @@ if ($_SESSION['edited'] == true) {
 }
 
 session_destroy();
-openSide();
+openSide("..\..");
+addQuicklinks("Admin", "..");
 
-echo "<h1>Hi Admin. Was willst du tun?</h1>";
+echo "<div><h1>Hi Admin. Was willst du tun?</h1>";
 echo "<h3>Bei laufendem Spiel können Fragen im aktuell gespielten Block nicht bearbeitet werden!</h3>";
 
-echo "<form><button type='submit' formaction='newQuestion.php'>Neue Frage erstellen</button>
-      <button type='submit' formaction='editQuestion.php'>Fragen bearbeiten</button>";
+echo "<form><button class='btn btn-dark' type='submit' formaction='newQuestion.php'>Neue Frage erstellen</button>
+      <button class='btn btn-dark' type='submit' formaction='editQuestion.php'>Fragen bearbeiten</button>";
 returnTo("../adminInterface.php");
 echo "</form>";
 
 questionOverview();
+echo "</div>";
 closeSide();

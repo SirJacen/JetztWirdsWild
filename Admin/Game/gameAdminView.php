@@ -4,8 +4,9 @@ $root = $_SERVER['DOCUMENT_ROOT'];
 require_once "$root" . "/functions.php";
 debugging("nein");
 
-openSide();
-echo "<h1>Spielübersicht</h1>";
+openSide("..\..");
+addQuicklinks("Admin", "..");
+echo "<div><h1>Spielübersicht</h1>";
 checkIfGameRunning();
 
 closeSide();
@@ -42,12 +43,13 @@ function checkIfGameRunning(){
 
 function startGame(){
     if (isset($_POST['startGame'])) {
-        chooseBlockType("./Game/startGame.php", "../adminInterface.php", "Welcher Block wird zuerst gespielt?");
+        chooseBlockType("./startGame.php", "../adminInterface.php", "Welcher Block wird zuerst gespielt?");
+        echo "</div>";
     } else {
         echo "<form>
-              <button formmethod='post' type='submit' name='startGame' value='start' formaction='gameAdminView.php'>Starte das Spiel</button>
-              <button formmethod='post' type='submit' formaction='../adminInterface.php'>Zurück</button>
-              </form>
+              <button class='btn btn-dark' formmethod='post' type='submit' name='startGame' value='start' formaction='gameAdminView.php'>Starte das Spiel</button>
+              <button class='btn btn-dark' formmethod='post' type='submit' formaction='../adminInterface.php'>Zurück</button>
+              </form></div>
                ";
     }
 }
@@ -58,6 +60,6 @@ function overwatchGame(){
          <button formmethod='post' type='submit' name='bearbeiten' value='true' formaction='editGame.php'>Bearbeite das laufende Spiel</button>
          <button formmethod='post' type='submit' name='end' value='true' formaction='editGame.php'>Beende das laufende Spiel</button>
          <button formmethod='post' type='submit' formaction='../adminInterface.php'>Zurück</button>
-         </form>
+         </form></div>
     ";
 }

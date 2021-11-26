@@ -1,15 +1,17 @@
 <?php
 
-function openSide(){
+function openSide($wayToRoot = "."){
     echo "<!DOCTYPE html>
           <html lang = 'de'>
           <head>
             <title>Jetzt wird's wild</title>
-            <link rel='stylesheet' href='stylesheet.css'>
+            <link rel='stylesheet' href='https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css' integrity='sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh' crossorigin='anonymous'>
+            <link rel='stylesheet' href='$wayToRoot\stylesheet.css'>
             <meta name='viewport' content='width=device-width, initial-scale=1.0'>
            </head>
            <body>    
     ";
+    addBanner($wayToRoot);
 }
 
 function closeSide(){
@@ -64,12 +66,12 @@ function writeInputField($label, $name, $value = false, $type="text"){
 function closeForm($name,$value,$previousPage = "false")
 {
     if($previousPage == "false"){
-        echo "<input type=\"submit\" name=\"$name\" value=\"$value\">
-              <input type=\"reset\" value=\"Abbrechen\">
+        echo "<button class='btn btn-dark' type=\"submit\" name=\"$name\" value=\"$value\">$value</button>
+              <button class='btn btn-dark' class='btn btn-dark' type=\"reset\" value=\"Abbrechen\">Abbrechen</button
               </form>";
     } else {
-        echo "<input type=\"submit\" name=\"$name\" value=\"$value\">
-              <input type=\"reset\" value=\"Abbrechen\">";
+        echo "<button class='btn btn-dark' type=\"submit\" name=\"$name\" value=\"$value\">$value</button>
+              <button class='btn btn-dark' type=\"reset\" value=\"Abbrechen\">Abbrechen</button>";
         returnTo($previousPage);
         echo  "</form>";
     }
@@ -89,10 +91,10 @@ function function_alert($message){
  */
 function returnTo($previousPage, $form = false){
     if ($form == false ) {
-        echo " <button type='submit' formaction='$previousPage' formnovalidate>Zurück</button>
+        echo " <button class='btn btn-dark' type='submit' formaction='$previousPage' formnovalidate>Zurück</button>
         ";
     } else {
-        echo " <form><button type='submit' formaction='$previousPage' formnovalidate>Zurück</button></form>
+        echo " <form><button class='btn btn-dark' type='submit' formaction='$previousPage' formnovalidate>Zurück</button></form>
         ";
     }
 }
@@ -102,6 +104,7 @@ function returnTo($previousPage, $form = false){
  * @return void
  */
 function chooseBlockType($postTo, $previousPage = false, $customLabel = false) {
+    echo "<div class='blockSelection'>";
     startForm("post","$postTo");
 
     if ($customLabel == false) {
@@ -116,6 +119,7 @@ function chooseBlockType($postTo, $previousPage = false, $customLabel = false) {
     echo"<input type=\"radio\" name=\"block\" value=\"4\" required> Block 4 - Aufzählgame<br></label>"; // chat
 
     closeForm("questionType","Weiter", "$previousPage");
+    echo "</div>";
 }
 
 /**
@@ -218,25 +222,26 @@ function questionOverview()
     }
     foreach ($questionArray as $key => $value) {
         $newKey = $key + 1;
-        echo "<br>Block $newKey: ";
+        echo "<br><div class='questionsBlock'>Block $newKey: </div><div class='questions'>";
         foreach ($value as $questionKey => $item) {
             $questionIndex = $questionKey+1;
             $questionName = $item['questionName'];
             if (isset($item['answer'])) {
                 $questionAnswers = $item['answer'];
-                echo "<br>==> Frage $questionIndex: $questionName => $questionAnswers";
+                echo "<p>==> Frage $questionIndex: $questionName <br>=> $questionAnswers</p>";
             } elseif (isset($item['answerA'])){
                 $questionAnswerA = $item['answerA'];
                 $questionAnswerB = $item['answerB'];
                 $questionAnswerC = $item['answerC'];
                 $questionAnswerD = $item['answerD'];
-                echo "<br>==> Frage $questionIndex: $questionName => A: $questionAnswerA,
-                      B: $questionAnswerB, C: $questionAnswerC, D: $questionAnswerD";
+                echo "<p>==> Frage $questionIndex: $questionName <br>=> A: $questionAnswerA,
+                      B: $questionAnswerB, C: $questionAnswerC, D: $questionAnswerD</p>";
             }else {
-                echo "<br>==> Frage $questionIndex: $questionName";
+                echo "<p>==> Frage $questionIndex: $questionName</p>";
             }
             checkImage($newKey, $questionName);
         }
+        echo "</div>";
     }
 }
 
@@ -264,6 +269,24 @@ function checkImage($block, $nameQuestion){
             $counter ++;
         }
     }
+}
 
+function addBanner($wayToRoot = ".") {
+    echo "<div class='banner-container'>
+			    <img class='banner' alt='Banner' src= '$wayToRoot\LOGO.jpeg'>
+          </div>";
 
+}
+
+function addQuicklinks($user, $pathIndicator = ".") {
+    echo "<section class='quicklinks'><div class='linkBox'>";
+    if ($user == "Admin"){
+        echo "<div class='link'><a class='btn btn-dark' href='$pathIndicator\adminInterface.php'>Interface</a></div>";
+        echo "<div class='link'><a class='btn btn-dark' href='$pathIndicator\Questions\questions.php'>Questions</a></div>";
+        echo "<div class='link'><a class='btn btn-dark' href='$pathIndicator\Game\gameAdminView.php'>Game</a></div>";
+        echo "<div class='link'><a class='btn btn-dark' href='$pathIndicator\..\index.php'>Log Out</a></div>";
+    } elseif ($user == "Quizmaster"){
+
+    }
+    echo "</div></section><br>";
 }
