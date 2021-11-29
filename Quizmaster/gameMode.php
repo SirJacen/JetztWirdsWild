@@ -3,6 +3,7 @@ $root = $_SERVER['DOCUMENT_ROOT'];
 require_once "$root" . "/functions.php";
 define("ResultPath", "$root" . "/Quizmaster/Ergebnisse/results.json");
 define("QuestionPath", "$root" . "\Quizmaster\currentBlock");
+define("PlayerPath", "$root" . "\Player\Questions");
 
 openSide();
 debugging("ja");
@@ -24,6 +25,9 @@ if($_POST['result']=="on"){
 }else{
     noGameOptions();
 }
+closeSide();
+
+//-------------------------------------------------
 
 function checkResult() :bool{
     $ret = false;
@@ -33,15 +37,27 @@ function checkResult() :bool{
     return $ret;
 }
 
-function splitQuestions(){
+function sendQuestions($array){
+    $json = json_encode($array);
+    $bytes = file_put_contents("questions.json", $json);
+    if($bytes){
+        echo"Fragen gesendet";
+    }
+    $file = "questions.json";
+    $finalDir = PlayerPath."\questions.json";
+    copy($file,$finalDir);
+}
 
-    //echo json_decode(file_get_contents($file),true);
-    //$array=file_get_contents($file);
-    //var_dump(json_decode($array));
-    //makeChoices($array);
+function splitQuestions(){
     // JSON 1 Auslesen und die Fragen Aufteilen
     // erste Frage in neue JSON 2 packen
     // erste Frage aus JSON 1 löschen
+    $questionArray = [];
+    array_push($questionArray, openJSON(checkBlock()));
+    foreach($questionArray as $key => $value){
+
+    }
+
 }
 
 function makeChoices($array)
@@ -53,7 +69,7 @@ function makeChoices($array)
     }
 }
 
-function checkQuestions(){
+function checkBlock(): int{
     $block = 1;
     while ($block<5){
         $file = QuestionPath . "\questionsB". "$block".".json";
@@ -63,10 +79,11 @@ function checkQuestions(){
         }
         $block++;
     }
+    return $block;
+}
 
-    showQuestions($block);
-    //nach Fragen im Ordner suchen
-    //Fragen ausgeben
+function checkQuestions(){
+    showQuestions(checkBlock());
 }
 
 function showQuestions($block)
@@ -97,22 +114,6 @@ function showQuestions($block)
     }
 }
 
-           /* if ($block == 1) {
-                //Schätzfragen
-            } elseif ($block == 2) {
-                echo $questionName;
-            } elseif ($block == 3) {
-
-            } elseif ($block == 4) {
-
-            }
-        }
-}*/
-
-function sendQuestions($path){
-
-}
-
 function noGameOptions(){
     echo"
         <form>
@@ -137,4 +138,4 @@ function runGameOptions(){
               </form>
     ";
 }
-closeSide();
+
