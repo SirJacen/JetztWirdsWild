@@ -1,7 +1,7 @@
 <?php
 $root = $_SERVER['DOCUMENT_ROOT'];
 require_once "$root" . "/functions.php";
-define("ResultPath", "$root" . "/Quizmaster/Ergebnisse/results.json");
+define("ResultPath", "$root" . "\Quizmaster\Ergebnisse/results.json");
 define("QuestionPath", "$root" . "\Quizmaster\currentBlock");
 define("PlayerPath", "$root" . "\Player\Questions");
 
