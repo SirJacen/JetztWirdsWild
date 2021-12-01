@@ -285,7 +285,9 @@ function addQuicklinks($user, $pathIndicator = ".") {
         echo "<div class='link'><a class='btn btn-dark' href='$pathIndicator\Game\gameAdminView.php'>Game</a></div>";
         echo "<div class='link'><a class='btn btn-dark' href='$pathIndicator\..\index.php'>Log Out</a></div>";
     } elseif ($user == "Quizmaster"){
-        echo "TO DO";
+        echo "<div class='link'><a class='btn btn-dark' href='$pathIndicator\quizMasterInterface.php'>Interface</a></div>";
+        echo "<div class='link'><a class='btn btn-dark' href='$pathIndicator\gameMode.php'>Gamemode</a></div>";
+        echo "<div class='link'><a class='btn btn-dark' href='$pathIndicator\..\index.php'>Log Out</a></div>";
     }
     echo "</div></section><br>";
 }

@@ -4,9 +4,11 @@ require_once "$root" . "/functions.php";
 define("ResultPath", "$root" . "\Quizmaster\Ergebnisse/results.json");
 define("QuestionPath", "$root" . "\Quizmaster\currentBlock");
 define("PlayerPath", "$root" . "\Player\Questions");
+debugging("nein");
 
-openSide();
-debugging("ja");
+openSide("..");
+addQuicklinks("Quizmaster");
+
 
 if($_POST['result']=="on"){
     if(checkResult()==false){
@@ -48,16 +50,16 @@ function sendQuestions($array){
     copy($file,$finalDir);
 }
 
-function splitQuestions(){
+function splitQuestions() : mixed{
     // JSON 1 Auslesen und die Fragen Aufteilen
     // erste Frage in neue JSON 2 packen
     // erste Frage aus JSON 1 löschen
     $questionArray = [];
     array_push($questionArray, openJSON(checkBlock()));
     foreach($questionArray as $key => $value){
-
+        echo "TO Do";
     }
-
+    return 0;
 }
 
 function makeChoices($array)
@@ -109,7 +111,7 @@ function showQuestions($block)
             }else {
                 echo "<br>==> Frage $questionIndex: $questionName";
             }
-            checkImage($newKey, $questionName);
+            checkImage($newKey, $questionName, "..");
         }
     }
 }
@@ -117,7 +119,7 @@ function showQuestions($block)
 function noGameOptions(){
     echo"
         <form>
-              <button formmethod='post' type='submit' name='check' value='on' formaction='gameMode.php'>Fragen checken</button>
+              <button class='btn btn-dark' formmethod='post' type='submit' name='check' value='on' formaction='gameMode.php'>Fragen checken</button>
               </form>
     ";
 }
@@ -125,8 +127,8 @@ function noGameOptions(){
 function sendGameOptions(){
     echo "
         <form>
-              <button formmethod='post' type='submit' name='senden' value='on' formaction='gameMode.php'>Fragen senden</button>
-              <button formmethod='post' type='submit' name='check' value='on' formaction='gameMode.php'>Fragen checken</button>
+              <button class='btn btn-dark' formmethod='post' type='submit' name='senden' value='on' formaction='gameMode.php'>Fragen senden</button>
+              <button class='btn btn-dark' formmethod='post' type='submit' name='check' value='on' formaction='gameMode.php'>Fragen checken</button>
               </form>
     ";
 }
@@ -134,7 +136,7 @@ function sendGameOptions(){
 function runGameOptions(){
     echo "Das Spiel läuft !<br>
         <form>
-              <button formmethod='post' type='submit' name='result' value='on' formaction='gameMode.php'>Ergebnisse</button>
+              <button class='btn btn-dark' formmethod='post' type='submit' name='result' value='on' formaction='gameMode.php'>Ergebnisse</button>
               </form>
     ";
 }

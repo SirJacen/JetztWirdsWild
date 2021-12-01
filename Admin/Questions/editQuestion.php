@@ -49,7 +49,7 @@ function createQuestionSelection($array){
 function deleteForm()
 {
     echo "
-        <input type='submit' name='questionSelection' value='Delete'>
+        <button class='btn btn-dark' type='submit' name='questionSelection' value='Delete'>Delete</button>
     ";
 }
 
