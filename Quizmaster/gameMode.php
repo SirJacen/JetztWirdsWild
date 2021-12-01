@@ -94,25 +94,26 @@ function showQuestions($block)
     array_push($questionArray, openJSON($block));
     foreach ($questionArray as $key => $value) {
         $newKey = $key + 1;
-        echo "<br>Block $newKey: ";
+        echo "<br><div class='questionsBlock'>Block $newKey: </div><div class='questions'>";
         foreach ($value as $questionKey => $item) {
             $questionIndex = $questionKey+1;
             $questionName = $item['questionName'];
             if (isset($item['answer'])) {
                 $questionAnswers = $item['answer'];
-                echo "<br>==> Frage $questionIndex: $questionName => $questionAnswers";
+                echo "<p> Frage $questionIndex: $questionName <br>=> $questionAnswers</p>";
             } elseif (isset($item['answerA'])){
                 $questionAnswerA = $item['answerA'];
                 $questionAnswerB = $item['answerB'];
                 $questionAnswerC = $item['answerC'];
                 $questionAnswerD = $item['answerD'];
-                echo "<br>==> Frage $questionIndex: $questionName => A: $questionAnswerA,
-                      B: $questionAnswerB, C: $questionAnswerC, D: $questionAnswerD";
+                echo "<p> Frage $questionIndex: $questionName <br>=> A: $questionAnswerA,
+                      B: $questionAnswerB, C: $questionAnswerC, D: $questionAnswerD</p>";
             }else {
-                echo "<br>==> Frage $questionIndex: $questionName";
+                echo "<p> Frage $questionIndex: $questionName</p>";
             }
             checkImage($newKey, $questionName, "..");
         }
+        echo "</div>";
     }
 }
 
