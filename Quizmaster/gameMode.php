@@ -11,12 +11,12 @@ addQuicklinks("Quizmaster");
 
 
 if($_POST['result']=="on"){
-    if(checkResult()==false){
+    if(checkResult() != false) {
+        winnerCalc(ResultPath);
+        noGameOptions();
+    }else {
         runGameOptions();
     }
-    winnerCalc(ResultPath);
-    //Stats aufrufen ??
-    noGameOptions();
 }elseif($_POST['senden']=="on"){
     checkQuestions();
     sendQuestions(splitQuestions(), checkBlock());
@@ -40,26 +40,53 @@ function checkResult() :bool{
 }
 
 function sendQuestions($array, $block){
-    $json = json_encode($array);
+    $addBlock = array("block"=>$block);
+    $json = json_encode(array_merge($array, $addBlock));
     //Blocknummer mit in den Namen der question json speichern, Nummer der Frage mit übergeben also Index + 1
     $bytes = file_put_contents(PlayerPath."\currentQuestionsB$block.json", $json);
     if($bytes){
-        echo"Fragen gesendet";
+        echo"Fragen gesendet<br>";
     }
 }
 
 function splitQuestions() : array
 {
-    // JSON 1 Auslesen und die Fragen Aufteilen
-    // erste Frage in neue JSON 2 packen
-    // erste Frage aus JSON 1 löschen
-    $questionArray = [];
-    array_push($questionArray, openJSON(checkBlock()));
-    foreach($questionArray as $key => $value){
-        echo "TO Do";
-    }
-    return $questionArray;
+    if(checkBlock()==null){
+        function_alert("Keine Fragen gefunden");
+    }else {
+        $questionArray = [];
+        array_push($questionArray, openJSON(checkBlock()));
+        if(empty($questionArray)){
+            function_alert("Es wurden alle Fragen gespielt");
+        }else {
+            foreach ($questionArray as $key => $value) {
+                foreach ($value as $questionKey => $item) {
+                    if ($questionKey == 0) {
+                        if (isset($item['answer'])) {
+                            $sendArray = array(
+                                "questionName" => $item['questionName'],
+                                "answer" => $item['answer']);
+                        } elseif (isset($item["answerA"])) {
+                            $sendArray = array(
+                                "questionName" => $item['questionName'],
+                                "answerA" => $item['answerA'],
+                                "answerB" => $item['answerB'],
+                                "answerC" => $item['answerC'],
+                                "answerD" => $item['answerD']);
+                        }
+                    }
+                }
+                unset($value[0]);
+                $keepArray = array_values($value);
+                $dir = QuestionPath . "\questionsB" . checkBlock() . ".json";
+                file_put_contents($dir, json_encode($keepArray));
+            }
+            }
+        }
+
+    return $sendArray;
 }
+
 
 function makeChoices($array)
 {
@@ -70,17 +97,16 @@ function makeChoices($array)
     }
 }
 
-function checkBlock(): int{
+function checkBlock(): ?int{
     $block = 1;
     while ($block<4){
         $file = QuestionPath . "\questionsB". "$block".".json";
         if(file_exists($file)){
-            echo "ok";
             return $block;
         }
         $block++;
     }
-    return 0;
+    return null;
 }
 
 function checkQuestions(){
@@ -90,7 +116,7 @@ function checkQuestions(){
 function showQuestions($block)
 {
     $questionArray = [];
-    array_push($questionArray, openJSON($block));
+    array_push($questionArray, openQuestion($block));
     foreach ($questionArray as $key => $value) {
         $newKey = $key + 1;
         echo "<br><div class='questionsBlock'>Block $block: </div><div class='questions'>";
@@ -99,6 +125,15 @@ function showQuestions($block)
         }
         echo "</div>";
     }
+}
+
+function openQuestion($block): mixed
+{
+    $root = $_SERVER['DOCUMENT_ROOT'];
+    $dir = "$root"."/Bloecke/"."$block";
+
+    $fileName = QuestionPath."/"."questionsB"."$block".".json";
+    return json_decode(file_get_contents($fileName),true);
 }
 
 function noGameOptions(){
@@ -121,6 +156,7 @@ function sendGameOptions(){
 function runGameOptions(){
     echo "Das Spiel läuft !<br>
         <form>
+             
               <button class='btn btn-dark' formmethod='post' type='submit' name='result' value='on' formaction='gameMode.php'>Ergebnisse</button>
               </form>
     ";
