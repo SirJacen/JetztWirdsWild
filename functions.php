@@ -329,3 +329,23 @@ function playerPoints (){
     $playerDir = $root."\Player\playerPoints.json";
     return json_decode(file_get_contents($playerDir));
 }
+
+function isGameRunning(): bool
+{
+    $root = $_SERVER['DOCUMENT_ROOT'];
+    $dir = $root ."/Quizmaster/currentBlock/";
+    $fileArray = glob($dir."*.json");
+    if (isset($fileArray['0'])){
+        return true;
+    } else {
+        return false;
+    }
+}
+
+function showPoints(){
+    $playerPoints = playerPoints();
+    $points1 = $playerPoints -> Player1;
+    $points2 = $playerPoints -> Player2;
+    echo "<div class='playerPoints'><h3>Player 1: $points1</h3></div>";
+    echo "<div class='playerPoints'><h3>Player 2: $points2</h3></div>";
+}

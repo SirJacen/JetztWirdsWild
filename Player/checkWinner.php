@@ -1,5 +1,7 @@
 <?php
+//Might delete this and switch to AJAX
 $root = $_SERVER['DOCUMENT_ROOT'];
+debugging("ja");
 if ($_POST['answer'] == $_POST['rightAnswer']){
     $currentPoints = playerPoints();
     $currentPoints -> Player.$_POST['player'] ++;
