@@ -1,6 +1,6 @@
 <?php
 $root = $_SERVER['DOCUMENT_ROOT'];
 require_once "$root" . "/functions.php";
-openSide("..");
+echo "<head><title>TEST</title></head>";
 pointsAjax();
 closeSide();

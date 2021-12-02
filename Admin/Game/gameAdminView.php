@@ -32,7 +32,7 @@ function checkIfGameRunning(){
                     $indexCounter ++;
                 }
             }
-            include "../../checkForPoints.php";
+            showPoints();
             overwatchGame();
         }
     } else {
