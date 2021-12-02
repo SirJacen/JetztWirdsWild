@@ -224,25 +224,29 @@ function questionOverview($pathToRoot)
         $newKey = $key + 1;
         echo "<br><div class='questionsBlock'>Block $newKey: </div><div class='questions'>";
         foreach ($value as $questionKey => $item) {
-            $questionIndex = $questionKey+1;
-            $questionName = $item['questionName'];
-            if (isset($item['answer'])) {
-                $questionAnswers = $item['answer'];
-                echo "<p> Frage $questionIndex: $questionName <br>=> $questionAnswers</p>";
-            } elseif (isset($item['answerA'])){
-                $questionAnswerA = $item['answerA'];
-                $questionAnswerB = $item['answerB'];
-                $questionAnswerC = $item['answerC'];
-                $questionAnswerD = $item['answerD'];
-                echo "<p> Frage $questionIndex: $questionName <br>=> A: $questionAnswerA,
-                      B: $questionAnswerB, C: $questionAnswerC, D: $questionAnswerD</p>";
-            }else {
-                echo "<p> Frage $questionIndex: $questionName</p>";
-            }
-            checkImage($newKey, $questionName, $pathToRoot);
+            loadQuestions($questionKey, $item, $newKey, $pathToRoot);
         }
         echo "</div>";
     }
+}
+
+function loadQuestions($questionKey, $item, $blockKey, $pathToRoot){
+    $questionIndex = $questionKey+1;
+    $questionName = $item['questionName'];
+    if (isset($item['answer'])) {
+        $questionAnswers = $item['answer'];
+        echo "<p> Frage $questionIndex: $questionName <br>=> $questionAnswers</p>";
+    } elseif (isset($item['answerA'])){
+        $questionAnswerA = $item['answerA'];
+        $questionAnswerB = $item['answerB'];
+        $questionAnswerC = $item['answerC'];
+        $questionAnswerD = $item['answerD'];
+        echo "<p> Frage $questionIndex: $questionName <br>=> A: $questionAnswerA,
+                      B: $questionAnswerB, C: $questionAnswerC, D: $questionAnswerD</p>";
+    }else {
+        echo "<p> Frage $questionIndex: $questionName</p>";
+    }
+    checkImage($blockKey, $questionName, $pathToRoot);
 }
 
 function checkImage($block, $nameQuestion, $pathToRoot){
