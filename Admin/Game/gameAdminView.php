@@ -32,7 +32,7 @@ function checkIfGameRunning(){
                     $indexCounter ++;
                 }
             }
-            showPoints();
+            pointsAjax("../..");
             overwatchGame();
         }
     } else {

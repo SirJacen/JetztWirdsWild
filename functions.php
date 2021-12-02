@@ -350,19 +350,22 @@ function showPoints(){
     echo "<div class='playerPoints'><h3>Player 2: $points2</h3></div>";
 }
 
-function pointsAjax(){
+function pointsAjax($pathToRoot){
     echo '
-        <body onload="myFunction()">
+       <body onload="myFunction(); setInterval(function(){myFunction()}, 5000);">
         <p id="test"></p>
         <script>
             function myFunction () {
                 let xhttp = new XMLHttpRequest();
                 xhttp.onreadystatechange = function (){
                     if (this.readyState === 4 && this.status === 200){
-                        document.getElementById("test").innerHTML = JSON.parse(this.responseText);
+                        var myArrayStr = JSON.stringify(this.responseText).replace(/\D/g, "");
+                        var player1 = myArrayStr.charAt(1);
+                        var player2 = myArrayStr.charAt(3)
+                        document.getElementById("test").innerHTML = "Spieler 1: " + player1 + " Punkte<br>Spieler 2: " + player2 + " Punkte";
                     }
                 };
-                xhttp.open("GET","./Player/playerPoints.json", true);
+                xhttp.open("GET","'.$pathToRoot.'/Player/playerPoints.json", true);
                 xhttp.send();
             }
         </script>

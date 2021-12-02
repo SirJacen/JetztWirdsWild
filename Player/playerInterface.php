@@ -6,7 +6,7 @@ $root = $_SERVER['DOCUMENT_ROOT'];
 require_once "$root"."/functions.php";
 session_start();
 define("CurrentQuestionPath", "$root" . "\Player\Questions");
-debugging("ja");
+debugging("nein");
 
 $pfadArray = glob(CurrentQuestionPath."\currentQuestionsB*.json");
 
@@ -16,7 +16,7 @@ $player = $_SESSION['player'];
 openSide("..");
 
 if ($_SESSION['played'] == true){
-    showPoints();
+    pointsAjax("..");
     $yourAnswer = $_SESSION['answer'];
     $currentArray = openFile($pfadArray['0']);
     $name = $currentArray['Question'];
@@ -57,7 +57,7 @@ if ($_SESSION['played'] == true){
     }
 
 } elseif($pfadArray['0']){
-    showPoints();
+    pointsAjax("..");
     $currentArray = openFile($pfadArray['0']);
     $name = $currentArray['Question'];
     $block = $currentArray['Block']; //Fragen zählen
@@ -76,7 +76,7 @@ if ($_SESSION['played'] == true){
         echo "</form></div>";
     }
 } elseif($running == true) {
-    showPoints();
+    pointsAjax("..");
     echo "<h1>Der Spielleiter stellt die nächste Frage vor</h1>";
 }
 else {

@@ -8,7 +8,7 @@ debugging("nein");
 
 openSide("..");
 addQuicklinks("Quizmaster");
-
+pointsAjax("..");
 
 if($_POST['result']=="on"){
     if(checkResult()==false){
