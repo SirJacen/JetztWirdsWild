@@ -7,9 +7,11 @@ $redirectionSide = "index";
 if ($_POST["username"]==="Player1" && $_POST["psw"]==="Player1"){
     $redirectionSide = "Player/playerInterface";
     $_SESSION['wrongID'] = false;
+    $_SESSION['player'] = 1;
 }elseif ($_POST["username"]==="Player2" && $_POST["psw"]==="Player2"){
     $redirectionSide = "Player/playerInterface";
     $_SESSION['wrongID'] = false;
+    $_SESSION['player'] = 2;
 }elseif($_POST["username"]==="Admin" && $_POST["psw"]==="Admin") {
     $redirectionSide = "Admin/adminInterface";
     $_SESSION['wrongID'] = false;

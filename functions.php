@@ -349,3 +349,20 @@ function showPoints(){
     echo "<div class='playerPoints'><h3>Player 1: $points1</h3></div>";
     echo "<div class='playerPoints'><h3>Player 2: $points2</h3></div>";
 }
+
+function pointsAjax(){
+    echo '
+        <p id="test"></p>
+        <script>
+            window.addEventListener("load",function () {
+                let xhttp = new XMLHttpRequest();
+                xhttp.onreadystatechange = function (){
+                    if (this.readyState === 4 && this.status === 200){
+                    document.getElementById("test").innerHTML = JSON.parse(this.responseText);
+                    }
+                };
+                xhttp.open("GET","/Player/playerPoints.json", true);
+            });
+        </script>
+    ';
+}

@@ -32,10 +32,7 @@ function checkIfGameRunning(){
                     $indexCounter ++;
                 }
             }
-            $playerPoints = playerPoints();
-            $points1 = $playerPoints -> Player1;
-            $points2 = $playerPoints -> Player2;
-            echo "<br>Punkte Player1: $points1<br>Punkte Player2: $points2<br><br>";
+            include "../../checkForPoints.php";
             overwatchGame();
         }
     } else {
