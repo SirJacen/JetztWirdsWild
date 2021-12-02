@@ -89,3 +89,7 @@ div {
     width: 100%;
     height: auto;
 }
+
+.answerButtons{
+    margin: 3px;
+}

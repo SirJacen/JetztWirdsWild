@@ -19,7 +19,7 @@ if (isset($_POST['end'])){
     foreach (glob($root."/Quizmaster/currentBlock/*.*") as $value){
         array_push($runningGame, $value);
     }
-    foreach(glob($root."/Player/currentQuestion/*.*") as $item){
+    foreach(glob($root."/Player/Questions/*.*") as $item){
         array_push($runningGame, $item);
     }
     foreach ($runningGame as $element){
