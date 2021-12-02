@@ -16,6 +16,7 @@ if (isset($_POST['end'])){
 } elseif (isset($_POST['delete'])){
     $runningGame=[];
     array_push($runningGame, $root."/Bloecke/runningGame/currentGame.json");
+    array_push($runningGame, $root."\Player\playerPoints.json");
     foreach (glob($root."/Quizmaster/currentBlock/*.*") as $value){
         array_push($runningGame, $value);
     }
