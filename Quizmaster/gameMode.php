@@ -42,7 +42,7 @@ function checkResult() :bool{
 function sendQuestions($array){
     print_r($array);
     $json = json_encode($array);
-    //Blocknummer mit in den Namen der question json speichern
+    //Blocknummer mit in den Namen der question json speichern, Nummer der Frage mit übergeben also Index + 1
     $bytes = file_put_contents("currentQuestionsB1.json", $json);
     if($bytes){
         echo"Fragen gesendet";

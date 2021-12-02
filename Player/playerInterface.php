@@ -9,18 +9,26 @@ debugging("nein");
 
 $pfadArray = glob(CurrentQuestionPath."\currentQuestionB*.json");
 openSide("..");
+$playerPoints = playerPoints();
+$points1 = $playerPoints -> Player1;
+$points2 = $playerPoints -> Player2;
+echo "<div class='playerPoints'><h3>Player 1: $points1</h3></div>";
+echo "<div class='playerPoints'><h3>Player 2: $points2</h3></div>";
 if($pfadArray['0']){
-    //print_r($pfadArray);
     $currentArray = openFile($pfadArray['0']);
     $name = $currentArray['Question'];
     $block = $currentArray['Block']; //Fragen zählen
-    echo "<div class='questionsBlock'><h1>Block $block</h1></div><div class='questions'><br><p>$name?</p>";
+    echo "<div class='questionsBlock'><h1>Frage wird vom Leiter übergegen</h1></div><div class='questions'><br><p>$name?</p>";
     checkImage($block, $name, "..");
+    echo "<input type='hidden' name='player' value='1'>";
+    $rightAnswer = $currentArray['Answers']['0'];
     if ($block == 1 || $block == 3 || $block == 4){
-        echo "<textarea>Answerfield</textarea><br><button class='btn btn-dark' type='submit'>Bestätigen</button></div>";
+        echo "<input type='hidden' name='rightAnswer' value='$rightAnswer'>";
+        echo "<textarea name='answer' placeholder='Hier die Antwort eingeben'></textarea><br><button class='btn btn-dark' type='submit' formmethod='post' formaction='checkWinner.php'>Bestätigen</button></div>";
     } elseif ($block == 2) {
         foreach ($currentArray['Answers'] as $key => $value) {
-            echo "<button class='btn btn-dark answerButtons' formmethod='post' formaction='playInterface.php' value='$value'>$value</button>";
+            echo "<input type='hidden' name='rightAnswer' value='$rightAnswer'>";
+            echo "<button class='btn btn-dark answerButtons' formmethod='post' formaction='checkWinner.php' name='answer' value='$value'>$value</button>";
         }
         echo "</div>";
     }

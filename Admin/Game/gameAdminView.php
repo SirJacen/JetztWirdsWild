@@ -32,7 +32,10 @@ function checkIfGameRunning(){
                     $indexCounter ++;
                 }
             }
-            echo "<br>Stats Player1: Get Stuff from PlayerClass<br>Stats Player2: Get Stuff from PlayerClass<br><br>";
+            $playerPoints = playerPoints();
+            $points1 = $playerPoints -> Player1;
+            $points2 = $playerPoints -> Player2;
+            echo "<br>Punkte Player1: $points1<br>Punkte Player2: $points2<br><br>";
             overwatchGame();
         }
     } else {

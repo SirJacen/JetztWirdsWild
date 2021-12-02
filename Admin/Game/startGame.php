@@ -15,4 +15,8 @@ $playedBlocks = [];
 array_push($playedBlocks, $chosenBlock);
 file_put_contents($playedBlocksFile,json_encode($playedBlocks));
 
+$playerPoints = ["Player1" => 0, "Player2" => 0];
+$playerDir = $root."\Player\playerPoints.json";
+file_put_contents($playerDir, json_encode($playerPoints));
+
 header("Location: gameAdminView.php");

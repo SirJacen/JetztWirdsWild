@@ -323,3 +323,9 @@ function winnerCalc($answerFile){
         winnerResult(2);
     }
 }
+
+function playerPoints (){
+    $root = $_SERVER['DOCUMENT_ROOT'];
+    $playerDir = $root."\Player\playerPoints.json";
+    return json_decode(file_get_contents($playerDir));
+}
