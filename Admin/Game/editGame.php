@@ -83,6 +83,7 @@ if (isset($_POST['block'])){
     $file = glob($dir."questionsB".$_POST['block'].".json")['0'];
     unlink(glob($root."/Quizmaster/currentBlock/*.*")['0']);
     copy ($file,$finalDir);
+    $tmpArray = [];
     $tmpArray = json_decode(file_get_contents($root."/Bloecke/runningGame/currentGame.json"),true);
     array_push($tmpArray, $_POST['block']);
     file_put_contents($root."/Bloecke/runningGame/currentGame.json",json_encode($tmpArray));

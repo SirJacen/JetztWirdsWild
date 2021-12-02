@@ -21,10 +21,9 @@ if ($_SESSION['played'] == true){
     $currentArray = openFile($pfadArray['0']);
     $name = $currentArray['Question'];
     $block = $currentArray['Block']; //Fragen zählen
-
-    checkImage($block, $name, "..");
     if ($_SESSION['correct'] == true) {
-        echo "<div class='questionsBlock'><h1>Du hast die Antwort richtig beantwortet</h1></div><div class='questions'><br><p>$name?</p>";
+        echo "<div class='questionsBlock'><h1>Du hast die Frage richtig beantwortet</h1></div><div class='questions'><br><p>$name?</p>";
+        checkImage($block, $name, "..");
         if ($block == 1 || $block == 3 || $block == 4) {
             echo "<div class='correctAnswer'><p>Deine Antwort: $yourAnswer ist richtg!</p></div></div>";
         } elseif ($block == 2) {
@@ -38,7 +37,8 @@ if ($_SESSION['played'] == true){
             echo "</div>";
         }
     } else {
-        echo "<div class='questionsBlock'><h1>Du hast die Antwort leider Falsch beantwortet!</h1></div><div class='questions'><br><p>$name?</p>";
+        echo "<div class='questionsBlock'><h1>Du hast die Frage leider Falsch beantwortet!</h1></div><div class='questions'><br><p>$name?</p>";
+        checkImage($block, $name, "..");
         $rightAnswer = $currentArray['Answers']['0'];
         if ($block == 1 || $block == 3 || $block == 4) {
             echo "<div class='wrongAnswer'><p>Deine Antwort: $yourAnswer ist faslch!</p></div></div>";
@@ -61,7 +61,7 @@ if ($_SESSION['played'] == true){
     $currentArray = openFile($pfadArray['0']);
     $name = $currentArray['Question'];
     $block = $currentArray['Block']; //Fragen zählen
-    echo "<div class='questionsBlock'><h1>Frage wird vom Leiter übergegen</h1></div><div class='questions'><br><p>$name?</p><form>";
+    echo "<div class='questionsBlock'><h1>Block $block</h1></div><div class='questions'><br><p>$name?</p><form>";
     checkImage($block, $name, "..");
     echo "<input type='hidden' name='player' value='1'>";
     $rightAnswer = $currentArray['Answers']['0'];

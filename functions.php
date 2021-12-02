@@ -359,10 +359,11 @@ function pointsAjax(){
                 let xhttp = new XMLHttpRequest();
                 xhttp.onreadystatechange = function (){
                     if (this.readyState === 4 && this.status === 200){
-                    document.getElementById("test").innerHTML = JSON.parse(this.responseText);
+                        document.getElementById("test").innerHTML = JSON.parse(this.responseText);
                     }
                 };
                 xhttp.open("GET","./Player/playerPoints.json", true);
+                xhttp.send();
             }
         </script>
     ';
