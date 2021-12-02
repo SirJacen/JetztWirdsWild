@@ -40,8 +40,10 @@ function checkResult() :bool{
 }
 
 function sendQuestions($array){
+    print_r($array);
     $json = json_encode($array);
-    $bytes = file_put_contents("questions.json", $json);
+    //Blocknummer mit in den Namen der question json speichern
+    $bytes = file_put_contents("currentQuestionsB1.json", $json);
     if($bytes){
         echo"Fragen gesendet";
     }
@@ -50,7 +52,8 @@ function sendQuestions($array){
     copy($file,$finalDir);
 }
 
-function splitQuestions() : mixed{
+function splitQuestions() : array
+{
     // JSON 1 Auslesen und die Fragen Aufteilen
     // erste Frage in neue JSON 2 packen
     // erste Frage aus JSON 1 löschen
@@ -59,7 +62,7 @@ function splitQuestions() : mixed{
     foreach($questionArray as $key => $value){
         echo "TO Do";
     }
-    return 0;
+    return $questionArray;
 }
 
 function makeChoices($array)
