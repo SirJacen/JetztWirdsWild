@@ -5,9 +5,9 @@ use JetBrains\PhpStorm\ArrayShape;
 $root = $_SERVER['DOCUMENT_ROOT'];
 require_once "$root"."/functions.php";
 define("CurrentQuestionPath", "$root" . "\Player\Questions");
-debugging("ja");
+debugging("nein");
 
-$pfadArray = glob(CurrentQuestionPath."\currentQuestionB*.json");
+$pfadArray = glob(CurrentQuestionPath."\currentQuestionsB*.json");
 
 $running = isGameRunning();
 
@@ -35,7 +35,8 @@ if($pfadArray['0']){
 } elseif($running == true) {
     showPoints();
     echo "<h1>Der Spielleiter stellt die nächste Frage vor</h1>";
-} else {
+}
+else {
     echo "<h1>Hi Player! Das Spiel startet gleich.</h1>";
 }
 
@@ -43,7 +44,7 @@ closeSide();
 
 #[ArrayShape(["Block" => "mixed", "Question" => "mixed", "Answers" => "array|null"])]
 function openFile($pfad) : array{
-    $block = str_replace(CurrentQuestionPath."\currentQuestionB", '', $pfad);
+    $block = str_replace(CurrentQuestionPath."\currentQuestionsB", '', $pfad);
     $block = preg_replace("/[.].+/", '', $block);
     $openedFile = json_decode(file_get_contents($pfad))['0'];
     $questionName = $openedFile -> questionName;

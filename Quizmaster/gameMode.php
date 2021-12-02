@@ -17,9 +17,9 @@ if($_POST['result']=="on"){
     winnerCalc(ResultPath);
     //Stats aufrufen ??
     noGameOptions();
-}elseif($_POST['send']=="on"){
+}elseif($_POST['senden']=="on"){
     checkQuestions();
-    sendQuestions(splitQuestions());
+    sendQuestions(splitQuestions(), checkBlock());
     runGameOptions();
 }elseif($_POST['check']=="on"){
     checkQuestions();
@@ -39,16 +39,13 @@ function checkResult() :bool{
     return $ret;
 }
 
-function sendQuestions($array){
+function sendQuestions($array, $block){
     $json = json_encode($array);
     //Blocknummer mit in den Namen der question json speichern, Nummer der Frage mit übergeben also Index + 1
-    $bytes = file_put_contents("currentQuestionsB1.json", $json);
+    $bytes = file_put_contents(PlayerPath."\currentQuestionsB$block.json", $json);
     if($bytes){
         echo"Fragen gesendet";
     }
-    $file = "questions.json";
-    $finalDir = PlayerPath."\questions.json";
-    copy($file,$finalDir);
 }
 
 function splitQuestions() : array
@@ -75,15 +72,15 @@ function makeChoices($array)
 
 function checkBlock(): int{
     $block = 1;
-    while ($block<5){
+    while ($block<4){
         $file = QuestionPath . "\questionsB". "$block".".json";
         if(file_exists($file)){
             echo "ok";
-            break;
+            return $block;
         }
         $block++;
     }
-    return $block;
+    return 0;
 }
 
 function checkQuestions(){
@@ -96,7 +93,7 @@ function showQuestions($block)
     array_push($questionArray, openJSON($block));
     foreach ($questionArray as $key => $value) {
         $newKey = $key + 1;
-        echo "<br><div class='questionsBlock'>Block $newKey: </div><div class='questions'>";
+        echo "<br><div class='questionsBlock'>Block $block: </div><div class='questions'>";
         foreach ($value as $questionKey => $item) {
             loadQuestions($questionKey, $item, $newKey, "..");
         }
