@@ -4,6 +4,7 @@ require_once "$root" . "/functions.php";
 define("ResultPath", "$root" . "\Quizmaster\Ergebnisse/results.json");
 define("QuestionPath", "$root" . "\Quizmaster\currentBlock");
 define("PlayerPath", "$root" . "\Player\Questions");
+define("Root", $root);
 debugging("nein");
 
 openSide("..");
@@ -43,7 +44,7 @@ function sendQuestions($array, $block){
     $addBlock = array("block"=>$block);
     $json = json_encode(array_merge($array, $addBlock));
     //Blocknummer mit in den Namen der question json speichern, Nummer der Frage mit übergeben also Index + 1
-    $bytes = file_put_contents(PlayerPath."\currentQuestionsB$block.json", $json);
+    $bytes = file_put_contents(PlayerPath."\currentQuestionsB$block.json", "[".$json."]");
     if($bytes){
         echo"Fragen gesendet<br>";
     }
@@ -51,15 +52,21 @@ function sendQuestions($array, $block){
 
 function splitQuestions() : array
 {
+    $sendArray = Null;
+    $block = "Block".checkBlock();
+    $numberDir = Root."/Bloecke/runningGame/questionNumber.json";
+    $questionNumber = json_decode(file_get_contents($numberDir));
+    $currentNumber = $questionNumber -> $block;
+    $currentNumber++;
     if(checkBlock()==null){
         function_alert("Keine Fragen gefunden");
     }else {
         $questionArray = [];
-        array_push($questionArray, openJSON(checkBlock()));
+        array_push($questionArray, openJSON(checkBlock(), true)); //OpenJSON geht hier nicht, zieht nicht aus dem QM Ordner sondern dem Admin Ordner
         if(empty($questionArray)){
             function_alert("Es wurden alle Fragen gespielt");
         }else {
-            foreach ($questionArray as $key => $value) {
+            foreach ($questionArray as $value) {
                 foreach ($value as $questionKey => $item) {
                     if ($questionKey == 0) {
                         if (isset($item['answer'])) {
@@ -80,9 +87,11 @@ function splitQuestions() : array
                 $keepArray = array_values($value);
                 $dir = QuestionPath . "\questionsB" . checkBlock() . ".json";
                 file_put_contents($dir, json_encode($keepArray));
-            }
+                $questionNumber -> $block = $currentNumber;
+                file_put_contents($numberDir, json_encode($questionNumber));
             }
         }
+    }
 
     return $sendArray;
 }
@@ -129,9 +138,6 @@ function showQuestions($block)
 
 function openQuestion($block): mixed
 {
-    $root = $_SERVER['DOCUMENT_ROOT'];
-    $dir = "$root"."/Bloecke/"."$block";
-
     $fileName = QuestionPath."/"."questionsB"."$block".".json";
     return json_decode(file_get_contents($fileName),true);
 }

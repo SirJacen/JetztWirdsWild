@@ -19,4 +19,8 @@ $playerPoints = ["Player1" => 0, "Player2" => 0];
 $playerDir = $root."\Player\playerPoints.json";
 file_put_contents($playerDir, json_encode($playerPoints));
 
+$questionNumber = ["Block1" => 0, "Block2" => 0, "Block3" => 0, "Block4" => 0];
+$numberDir = $root."/Bloecke/runningGame/questionNumber.json";
+file_put_contents($numberDir, json_encode($questionNumber));
+
 header("Location: gameAdminView.php");

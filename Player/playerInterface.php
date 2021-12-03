@@ -6,6 +6,7 @@ $root = $_SERVER['DOCUMENT_ROOT'];
 require_once "$root"."/functions.php";
 session_start();
 define("CurrentQuestionPath", "$root" . "\Player\Questions");
+define("Root", $root);
 debugging("nein");
 
 $pfadArray = glob(CurrentQuestionPath."\currentQuestionsB*.json");
@@ -60,8 +61,9 @@ if ($_SESSION['played'] == true){
     pointsAjax("..");
     $currentArray = openFile($pfadArray['0']);
     $name = $currentArray['Question'];
-    $block = $currentArray['Block']; //Fragen zählen
-    echo "<div class='questionsBlock'><h1>Block $block</h1></div><div class='questions'><br><p>$name?</p><form>";
+    $block = $currentArray['Block'];
+    $currentNumber = $currentArray['Number'];
+    echo "<div class='questionsBlock'><h1>Block $block: Frage $currentNumber</h1></div><div class='questions'><br><p>$name?</p><form>";
     checkImage($block, $name, "..");
     echo "<input type='hidden' name='player' value='1'>";
     $rightAnswer = $currentArray['Answers']['0'];
@@ -85,7 +87,7 @@ else {
 
 closeSide();
 
-#[ArrayShape(["Block" => "mixed", "Question" => "mixed", "Answers" => "array|null"])]
+#[ArrayShape(["Block" => "mixed", "Question" => "mixed", "Answers" => "array|null", "Number" => "mixed"])]
 function openFile($pfad) : array{
     $block = str_replace(CurrentQuestionPath."\currentQuestionsB", '', $pfad);
     $block = preg_replace("/[.].+/", '', $block);
@@ -98,5 +100,6 @@ function openFile($pfad) : array{
     } else {
         $answerArray = NULL;
     }
-    return ["Block" => $block, "Question" => $questionName, "Answers" => $answerArray];
+    $questionNumber = checkQuestionNumber($block);
+    return ["Block" => $block, "Question" => $questionName, "Answers" => $answerArray, "Number" => $questionNumber];
 }

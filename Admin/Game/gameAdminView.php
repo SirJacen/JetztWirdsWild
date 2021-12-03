@@ -14,8 +14,9 @@ closeSide();
 function checkIfGameRunning(){
     $root = $_SERVER['DOCUMENT_ROOT'];
     $dir = $root ."/Quizmaster/currentBlock/";
+    $dirGame = $root."/Bloecke/runningGame";
     $fileArray = glob($dir."*.json");
-    $playedGames = json_decode(file_get_contents($root."/Bloecke/runningGame/currentGame.json"));
+    $playedGames = json_decode(file_get_contents($dirGame."/currentGame.json"));
     $indexCounter = 1;
 
     if(isset($fileArray['1'])){
@@ -25,7 +26,8 @@ function checkIfGameRunning(){
         if (file_exists($file)) {
             $name = str_replace($dir . "questionsB", '', $file);
             $name = str_replace(".json", '', $name);
-            echo "Aktuell wird Block $name gespielt<br><br>";
+            $currentNumber = checkQuestionNumber($name);
+            echo "Aktuell wird Block $name mit Frage $currentNumber gespielt<br><br>";
             foreach ($playedGames as $game){
                 if ($game !== $name){
                     echo "Das $indexCounter. Spiel war Block $game.<br>";
@@ -57,7 +59,7 @@ function startGame(){
 function overwatchGame(){
     echo "
          <form>
-         <button class='btn btn-dark' formmethod='post' type='submit' name='bearbeiten' value='true' formaction='editGame.php'>Bearbeite das laufende Spiel</button>
+         <button class='btn btn-dark' formmethod='post' type='submit' name='bearbeiten' value='true' formaction='editGame.php'>Wähle den nächsten Block aus</button>
          <button class='btn btn-dark' formmethod='post' type='submit' name='end' value='true' formaction='editGame.php'>Beende das laufende Spiel</button>
          <button class='btn btn-dark' formmethod='post' type='submit' formaction='../adminInterface.php'>Zurück</button>
          </form></div>

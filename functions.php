@@ -125,15 +125,19 @@ function chooseBlockType($postTo, $previousPage = false, $customLabel = false) {
 /**
  * Liest eine JSON Datei und gibt das Array zurück
  * @param $block
+ * @param bool $quizmaster
  * @return mixed
  */
-function openJSON($block): mixed
+function openJSON($block, bool $quizmaster = false): mixed
 {
     $root = $_SERVER['DOCUMENT_ROOT'];
-    $dir = "$root"."/Bloecke/"."$block";
-
-    $fileName = "$dir"."/"."questionsB"."$block".".json";
-    return json_decode(file_get_contents($fileName),true);
+    if ($quizmaster == false) {
+        $dir = "$root" . "/Bloecke/" . "$block";
+    } else {
+        $dir = $root."/Quizmaster/currentBlock";
+    }
+    $fileName = "$dir" . "/" . "questionsB" . "$block" . ".json";
+    return json_decode(file_get_contents($fileName), true);
 }
 
 function json($frage, $block, $overwrite = false)
@@ -363,4 +367,11 @@ function pointsAjax($pathToRoot){
             }
         </script>
     ';
+}
+
+function checkQuestionNumber($block){
+    $root = $_SERVER['DOCUMENT_ROOT'];
+    $questionNumber = json_decode(file_get_contents($root. "Bloecke/runningGame/questionNumber.json"));
+    $index = "Block".$block;
+    return $questionNumber -> $index;
 }
