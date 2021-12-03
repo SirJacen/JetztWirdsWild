@@ -411,3 +411,13 @@ function checkQuestionNumber($block){
     ';
 }
 */
+
+/**
+ * @TODO
+ * Automatisierte Aktualisierung und Einlesung von neu gesendeten Fragenblöcken zum Quizmaster, das gleiche auch für die Spieler;
+ */
+/**
+function AJAXquizmaster(){
+
+}
+ */
