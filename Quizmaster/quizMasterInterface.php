@@ -5,6 +5,7 @@ require_once "$root" . "/functions.php";
 
 openSide("..");
 addQuicklinks("Quizmaster");
-pointsAjax("..");
-echo "<form><button class='btn btn-dark' type='submit' formmethod='post' formaction='gameMode.php'>Weiter</button></form>";
+echo "<form>
+              <button class='btn btn-dark' formmethod='post' type='submit' formaction='gameMode.php'>Spielen</button>
+              </form>";
 closeSide();
