@@ -128,7 +128,7 @@ function chooseBlockType($postTo, $previousPage = false, $customLabel = false) {
  * @param bool $quizmaster
  * @return mixed
  */
-function openJSON($block, bool $quizmaster = false): mixed
+function openJSON($block, bool $quizmaster = false): array
 {
     $root = $_SERVER['DOCUMENT_ROOT'];
     if ($quizmaster == false) {
