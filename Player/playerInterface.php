@@ -37,6 +37,7 @@ if ($_SESSION['played'] == true){
             }
             echo "</div>";
         }
+        $_SESSION['played'] = false; // DIRTY FIX
     } else {
         echo "<div class='questionsBlock'><h1>Du hast die Frage leider Falsch beantwortet!</h1></div><div class='questions'><br><p>$name?</p>";
         checkImage($block, $name, "..");
