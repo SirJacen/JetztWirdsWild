@@ -157,8 +157,6 @@ function json($frage, $block, $overwrite = false)
             array_push($savingArray, $frage);
             $jsonString = json_encode($savingArray);
         }
-
-
         file_put_contents($fileName, $jsonString);
     } elseif($overwrite == true){
         $jsonString = json_encode($frage);
@@ -262,7 +260,6 @@ function checkImage($block, $nameQuestion, $pathToRoot){
     unset($array[$keyJSON]);
     $workingArray = array_values($array);
     $namedArray = [];
-
     foreach ($workingArray as $value){
         $name = str_replace($dir."/", '',$value);
         $name = preg_replace("/[.].+/", '', $name);
@@ -350,7 +347,10 @@ function isGameRunning(): bool
 function pointsAjax($pathToRoot){
     echo '
        <body onload="pointsAJAX(); setInterval(function(){pointsAJAX()}, 5000);">
-        <p id="test"></p>
+        <div class ="pointContainer">
+        <div class ="points" id="player1"></div>
+        <div class ="points" id="player2"></div>
+        </div><br><br>
         <script>
             function pointsAJAX () {
                 let xhttp = new XMLHttpRequest();
@@ -359,7 +359,8 @@ function pointsAjax($pathToRoot){
                         let myArrayStr = JSON.stringify(this.responseText).replace(/\D/g, "");
                         let player1 = myArrayStr.charAt(1);
                         let player2 = myArrayStr.charAt(3)
-                        document.getElementById("test").innerHTML = "Spieler 1: " + player1 + " Punkte<br>Spieler 2: " + player2 + " Punkte";
+                        document.getElementById("player1").innerHTML = "Spieler 1: " + player1 + " Punkte<br>";
+                        document.getElementById("player2").innerHTML = "Spieler 2: " + player2 + " Punkte<br>";
                     }
                 };
                 xhttp.open("GET","'.$pathToRoot.'/Player/playerPoints.json", true);

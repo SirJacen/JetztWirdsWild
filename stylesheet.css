@@ -114,6 +114,16 @@ div {
     font-size: larger;
 }
 
-#test{
-
+.points{
+    color: white;
+    padding-left: 5px;
+    padding-right: 5px;
+    border-bottom-width: thick;
+    border-style: solid;
+    border-radius: 4px;
+    border-color: #343A40;
+    background-color: #343A40;
+    text-align:center;
+    display:inline-block;
+    margin-left: 3px;
 }

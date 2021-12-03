@@ -6,7 +6,7 @@ debugging("nein");
 
 openSide("..\..");
 addQuicklinks("Admin", "..");
-echo "<div><h1>Spielübersicht</h1>";
+echo "<div class='questionsBlock'><h1>Spielübersicht</h1></div><div class='questions'>";
 checkIfGameRunning();
 
 closeSide();
