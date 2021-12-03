@@ -124,11 +124,13 @@ function checkQuestions(){
 
 function showQuestions($block)
 {
+    $number = checkQuestionNumber($block);
+    $number++ ;
     $questionArray = [];
     array_push($questionArray, openQuestion($block));
     foreach ($questionArray as $key => $value) {
         $newKey = $key + 1;
-        echo "<br><div class='questionsBlock'>Block $block: </div><div class='questions'>";
+        echo "<br><div class='questionsBlock'>Block $block Frage $number:</div><div class='questions'>";
         foreach ($value as $questionKey => $item) {
             loadQuestions($questionKey, $item, $newKey, "..");
         }

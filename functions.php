@@ -349,16 +349,16 @@ function isGameRunning(): bool
 
 function pointsAjax($pathToRoot){
     echo '
-       <body onload="myFunction(); setInterval(function(){myFunction()}, 5000);">
+       <body onload="pointsAJAX(); setInterval(function(){pointsAJAX()}, 5000);">
         <p id="test"></p>
         <script>
-            function myFunction () {
+            function pointsAJAX () {
                 let xhttp = new XMLHttpRequest();
                 xhttp.onreadystatechange = function (){
                     if (this.readyState === 4 && this.status === 200){
-                        var myArrayStr = JSON.stringify(this.responseText).replace(/\D/g, "");
-                        var player1 = myArrayStr.charAt(1);
-                        var player2 = myArrayStr.charAt(3)
+                        let myArrayStr = JSON.stringify(this.responseText).replace(/\D/g, "");
+                        let player1 = myArrayStr.charAt(1);
+                        let player2 = myArrayStr.charAt(3)
                         document.getElementById("test").innerHTML = "Spieler 1: " + player1 + " Punkte<br>Spieler 2: " + player2 + " Punkte";
                     }
                 };
@@ -371,7 +371,43 @@ function pointsAjax($pathToRoot){
 
 function checkQuestionNumber($block){
     $root = $_SERVER['DOCUMENT_ROOT'];
-    $questionNumber = json_decode(file_get_contents($root. "Bloecke/runningGame/questionNumber.json"));
+    $questionNumber = json_decode(file_get_contents($root. "/Bloecke/runningGame/questionNumber.json"));
     $index = "Block".$block;
     return $questionNumber -> $index;
 }
+
+/**
+ * @param $block
+ * @TODO
+ * AJAX zum Auslesen der aktuellen Fragen nummer
+ *
+ */
+/**
+ * function questionNumberAjax($block){
+    $root = $_SERVER['DOCUMENT_ROOT'];
+    echo '
+       <body onload="questionAJAX(); setInterval(function(){questionAJAX()}, 5000);">
+        <script>
+            function questionAJAX () {
+                let xhttp = new XMLHttpRequest();
+                xhttp.onreadystatechange = function (){
+                    if (this.readyState === 4 && this.status === 200){
+                        var myArrayStr = JSON.stringify(this.responseText).replace(/\D/g, "");
+                        var block1 = myArrayStr.charAt(1);
+                        var block2 = myArrayStr.charAt(3);
+                        var block3 = myArrayStr.charAt(5);
+                        var block4 = myArrayStr.charAt(7);
+                    }
+                };
+                xhttp.open("GET","'.$root.'/Bloecke/runningGame/questionNumber.json", true);
+                xhttp.send();
+            }
+        </script>
+        <?php
+        $blockIndex = "block".$block;
+        $getValue = var $blockIndex;
+        return $getValue;
+        ?>
+    ';
+}
+*/
