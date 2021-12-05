@@ -126,7 +126,7 @@ function chooseBlockType($postTo, $previousPage = false, $customLabel = false) {
  * Liest eine JSON Datei und gibt das Array zurück
  * @param $block
  * @param bool $quizmaster
- * @return mixed
+ * @return array
  */
 function openJSON($block, bool $quizmaster = false): array
 {

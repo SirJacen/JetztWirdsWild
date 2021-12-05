@@ -7,7 +7,7 @@ require_once "$root"."/functions.php";
 session_start();
 define("CurrentQuestionPath", "$root" . "\Player\Questions");
 define("Root", $root);
-debugging("nein");
+debugging("ja");
 
 $pfadArray = glob(CurrentQuestionPath."\currentQuestionsB*.json");
 

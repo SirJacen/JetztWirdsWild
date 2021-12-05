@@ -7,6 +7,7 @@ debugging("nein");
 
 $_SESSION['played'] = true;
 $_SESSION['answer'] = $_POST['answer'];
+
 if ($_POST['answer'] == $_POST['rightAnswer']){
     $currentPoints = playerPoints();
     if($_SESSION['player'] == 1) {
