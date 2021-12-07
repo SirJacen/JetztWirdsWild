@@ -19,7 +19,6 @@ echo "<form><button class='btn btn-dark' type='submit' formaction='newQuestion.p
       <button class='btn btn-dark' type='submit' formaction='editQuestion.php'>Fragen bearbeiten</button>";
 returnTo("../adminInterface.php");
 echo "</form>";
-
 questionOverview("..\..");
 echo "</div>";
 closeSide();
