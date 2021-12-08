@@ -31,15 +31,24 @@ if(!$arrayIsEmpty) {
     $rightAnswer = $currentArray['Answers']['0'];
 
     $_SESSION["rightAnswer"] = $currentArray['Answers']['0'];
-    if ($block == 1 || $block == 3 || $block == 4){
+    if ($block == 1 ){
         echo "<input type='hidden' name='rightAnswer' value='$rightAnswer'>";
-        echo "<textarea name='answer' placeholder='Hier die Antwort eingeben'></textarea> 
+        echo "<input name='answer' type='number' required> 
+              <br><br> 
+              <button class='btn btn-dark' type='submit' formmethod='post' formaction='checkWinner.php'>Bestätigen</button>
+              </div>";
+    }
+    elseif ($block == 3 || $block == 4){
+        echo "<input type='hidden' name='rightAnswer' value='$rightAnswer'>";
+        echo "<textarea name='answer' placeholder='Hier die Antwort eingeben' required></textarea> 
               <br> 
               <button class='btn btn-dark' type='submit' formmethod='post' formaction='checkWinner.php'>Bestätigen</button>
               </div>";
     }
-    elseif ($block == 2) {
+    elseif ($block == 2) { //Buzzerfragen
         echo "<input type='hidden' name='rightAnswer' value='$rightAnswer'>";
+        shuffle($currentArray['Answers']);
+        $_SESSION['shuffledArray'] = $currentArray['Answers'];
         foreach ($currentArray['Answers'] as $key => $value) {
             echo "<button class='btn btn-dark answerButtons' type='submit' formmethod='post' formaction='checkWinner.php' name='answer' value='$value'>$value</button>";
         }

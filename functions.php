@@ -245,7 +245,7 @@ function loadQuestions($questionKey, $item, $blockKey, $pathToRoot){
         $questionAnswerB = $item['answerB'];
         $questionAnswerC = $item['answerC'];
         $questionAnswerD = $item['answerD'];
-        echo "<p> Frage $questionIndex: $questionName <br>=> A: $questionAnswerA,
+        echo "<p> Frage $questionIndex: $questionName <br>=> Richtige Antwort : $questionAnswerA,
                       B: $questionAnswerB, C: $questionAnswerC, D: $questionAnswerD</p>";
     }else {
         echo "<p> Frage $questionIndex: $questionName</p>";
@@ -291,6 +291,7 @@ function addQuicklinks($user, $pathIndicator = ".") {
         echo "<div class='link'><a class='btn btn-dark' href='$pathIndicator\adminInterface.php'>Interface</a></div>";
         echo "<div class='link'><a class='btn btn-dark' href='$pathIndicator\Questions\questions.php'>Questions</a></div>";
         echo "<div class='link'><a class='btn btn-dark' href='$pathIndicator\Game\gameAdminView.php'>Game</a></div>";
+        echo "<div class='link'><a class='btn btn-dark' href='$pathIndicator\override.php'>Override</a></div>";
         echo "<div class='link'><a class='btn btn-dark' href='$pathIndicator\..\index.php'>Log Out</a></div>";
     } elseif ($user == "Quizmaster"){
         echo "<div class='link'><a class='btn btn-dark' href='$pathIndicator\quizMasterInterface.php'>Interface</a></div>";

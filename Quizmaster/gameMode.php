@@ -99,7 +99,7 @@ function splitQuestions() : array
             }
         }
     }
-    print_r($sendArray);
+    //print_r($sendArray);
     return $sendArray;
 }
 
@@ -139,7 +139,13 @@ function showQuestions($block) // int oder null
         $newKey = $key + 1;
         echo "<br><div class='questionsBlock'>Block $block:</div><div class='questions'>";
         foreach ($value as $questionKey => $item) {
-            loadQuestions($questionKey, $item, $newKey, "..");  // functions.php
+            if ($questionKey == 0) {
+                echo "<div class='currentQuestion'>";
+                loadQuestions($questionKey, $item, $newKey, "..");  // functions.php
+                echo "</div>";
+            }else {
+                loadQuestions($questionKey, $item, $newKey, "..");  // functions.php
+            }
         }
         echo "</div>";
     }
@@ -160,20 +166,40 @@ function noGameOptions(){
 }
 
 function sendGameOptions(){
-    echo "
+    $array = json_decode(file_get_contents(glob("./currentBlock/questionsB*.json")['0']), true);
+    if (empty($array)){
+        echo "Die Letzte Frage wurde gespielt <br>
+        <form>
+              <button class='btn btn-dark' formmethod='post' type='submit' formaction='gameMode.php'>Nächsten Block wählen</button>
+              <button class='btn btn-dark' formmethod='post' type='submit' name='result' value='on' formaction='gameMode.php'>Ergebnisse</button>
+              </form>
+        ";
+    } else {
+        echo "
         <form>
               <button class='btn btn-dark' formmethod='post' type='submit' name='senden' value='on' formaction='gameMode.php'>Frage senden</button>
               <button class='btn btn-dark' formmethod='post' type='submit' name='check' value='on' formaction='gameMode.php'>Fragen checken</button>
               </form>
     ";
+    }
 }
 
 function runGameOptions(){
-    echo "Das Spiel läuft !<br>
+    $array = json_decode(file_get_contents(glob("./currentBlock/questionsB*.json")['0']), true);
+    if (empty($array)){
+        echo "Die Letzte Frage wurde gespielt<br>
+        <form>
+              <button class='btn btn-dark' formmethod='post' type='submit' formaction='gameMode.php'>Nächsten Block wählen</button>
+              <button class='btn btn-dark' formmethod='post' type='submit' name='result' value='on' formaction='gameMode.php'>Ergebnisse</button>
+              </form>
+        ";
+    } else {
+        echo "Das Spiel läuft !<br>
         <form>
               <button class='btn btn-dark' formmethod='post' type='submit' name='senden' value='on' formaction='gameMode.php'>Nächste Frage senden</button>
               <button class='btn btn-dark' formmethod='post' type='submit' name='result' value='on' formaction='gameMode.php'>Ergebnisse</button>
               </form>
-    ";
+        ";
+    }
 }
 

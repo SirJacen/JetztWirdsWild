@@ -28,7 +28,8 @@ if ($_SESSION['correct'] == "true") {
         echo "<div class='correctAnswer'><p>Deine Antwort: $yourAnswer ist richtig!</p></div></div>";
     }
     elseif ($block == 2) {
-        foreach ($currentArray['Answers'] as $key => $value) {
+        $usedArray = $_SESSION['shuffledArray'];
+        foreach ($usedArray as $key => $value) {
             if($value == $yourAnswer) {
                 echo "<button class='btn btn-success answerButtons' type='submit' formmethod='post' formaction='checkWinner.php' name='answer' value='$value'>$value</button>";
             }
@@ -52,7 +53,8 @@ else {
         echo "<div class='wrongAnswer'><p>Deine Antwort: $yourAnswer ist falsch!</p></div></div>";
     }
     elseif ($block == 2) {
-        foreach ($currentArray['Answers'] as $key => $value) {
+        $usedArray = $_SESSION['shuffledArray'];
+        foreach ($usedArray as $key => $value) {
             if($value == $rightAnswer) {
                 echo "<button class='btn btn-success answerButtons' type='submit' formmethod='post' formaction='checkWinner.php' name='answer' value='$value'>$value</button>";
             } elseif ($value == $yourAnswer){

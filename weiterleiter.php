@@ -18,6 +18,9 @@ if ($_POST["username"]==="Player1" && $_POST["psw"]==="Player1"){
 }elseif ($_POST["username"]==="Leiter" && $_POST["psw"]==="Leiter"){
     $redirectionSide = "Quizmaster/quizMasterInterface";
     $_SESSION['wrongID'] = false;
+}elseif ($_POST["username"]==="Points" && $_POST["psw"]==="Points") {
+    $redirectionSide = "points";
+    $_SESSION['wrongID'] = false;
 }
 header("Location:".$redirectionSide.".php");
 debugging("ja");
