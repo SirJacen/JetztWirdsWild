@@ -103,14 +103,14 @@ function splitQuestions() : array
     return $sendArray;
 }
 
-function makeChoices($array)
+/**function makeChoices($array)
 {
     foreach ($array as $question) {
         $counter = 0;
         echo "<input type='radio' id='question' name='$counter' value='on'>
          <label for='html'>$question</label><br>";
     }
-}
+}*/
 
 function checkBlock(): ?int{
     $block = 1;
@@ -130,8 +130,6 @@ function checkQuestions(){
 
 function showQuestions($block) // int oder null
 {
-    //$number = checkQuestionNumber($block); // functions.php
-   // $number++ ;
     $questionArray = [];
     array_push($questionArray, openQuestion($block));
 

@@ -8,6 +8,7 @@ if (isset($_POST['player1']) && isset($_POST['player2'])){
     file_put_contents("../Player/playerPoints.json", json_encode($decodedArray));
 }
 addQuicklinks("Admin");
+pointsAjax("..");
 pointsOverride();
 closeSide();
 

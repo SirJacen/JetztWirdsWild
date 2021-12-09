@@ -359,9 +359,10 @@ function pointsAjax($pathToRoot){
                 let xhttp = new XMLHttpRequest();
                 xhttp.onreadystatechange = function (){
                     if (this.readyState === 4 && this.status === 200){
-                        let myArrayStr = JSON.stringify(this.responseText).replace(/\D/g, "");
-                        let player1 = myArrayStr.charAt(1);
-                        let player2 = myArrayStr.charAt(3)
+                        let myArrayStr = JSON.stringify(this.responseText).replace(/("\D*[1-2]\D*")/g, "");
+                        let myArrayStr2 = myArrayStr.match(/\D\d+/g);
+                        let player1 = myArrayStr.replace(/(\D.*)/g, "");
+                        let player2 = myArrayStr2[0].replace(/\D/g,"");
                         document.getElementById("player1").innerHTML = "Spieler 1: " + player1 + " Punkte<br>";
                         document.getElementById("player2").innerHTML = "Spieler 2: " + player2 + " Punkte<br>";
                     }
