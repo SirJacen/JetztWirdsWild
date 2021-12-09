@@ -64,6 +64,7 @@ div {
 }
 
 .questionsBlock{
+    color: white;
     width: 50%;
     margin: auto;
     border-style: solid;

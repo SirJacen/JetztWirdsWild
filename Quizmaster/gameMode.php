@@ -11,7 +11,7 @@ openSide("..");
 addQuicklinks("Quizmaster");
 pointsAjax("..");
 
-if($_POST['result']=="on") {
+if($_POST['result']=="on") { // Bearbeiten mit AJAX
     if(checkResult() != false) {
         winnerCalc(ResultPath);
         noGameOptions();
@@ -171,7 +171,12 @@ function showQuestions($block) // int oder null
 function openQuestion($block): array
 {
     $fileName = QuestionPath."/"."questionsB"."$block".".json";
-    return json_decode(file_get_contents($fileName),true);
+    if (file_exists($fileName)) {
+        return json_decode(file_get_contents($fileName), true);
+    } else {
+        return [];
+    }
+
 }
 
 function noGameOptions(){
@@ -183,7 +188,11 @@ function noGameOptions(){
 }
 
 function sendGameOptions(){
-    $array = json_decode(file_get_contents(glob("./currentBlock/questionsB*.json")['0']), true);
+    if (file_exists(glob("./currentBlock/questionsB*.json")['0'])) {
+        $array = json_decode(file_get_contents(glob("./currentBlock/questionsB*.json")['0']), true);
+    } else {
+        $array = [];
+    }
     if (empty($array)){
         echo "Die Letzte Frage wurde gespielt <br>
         <form>
@@ -202,7 +211,11 @@ function sendGameOptions(){
 }
 
 function runGameOptions(){
-    $array = json_decode(file_get_contents(glob("./currentBlock/questionsB*.json")['0']), true);
+    if (file_exists(glob("./currentBlock/questionsB*.json")['0'])) {
+        $array = json_decode(file_get_contents(glob("./currentBlock/questionsB*.json")['0']), true);
+    } else {
+        $array = [];
+    }
     if (empty($array)){
         echo "Die Letzte Frage wurde gespielt<br>
         <form>

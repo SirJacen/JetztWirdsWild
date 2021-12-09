@@ -16,18 +16,16 @@ if (isset($_POST['end'])) {
 }
 
 elseif (isset($_POST['delete'])) {
-    $runningGame=[];
-    array_push($runningGame, $root."/Bloecke/runningGame/currentGame.json");
-    array_push($runningGame, $root."/Bloecke/runningGame/questionNumber.json");
-    array_push($runningGame, $root."/Player/playerPoints.json");
+    $_SESSION["test"] = true;
+    $playerPoints = ["Player1" => 0, "Player2" => 0];
+    $playerDir = $root."/Player/playerPoints.json";
+    file_put_contents($playerDir, json_encode($playerPoints));
+
+    file_put_contents($root."/Bloecke/runningGame/currentGame.json", "");
+    file_put_contents($root."/Bloecke/runningGame/questionNumber.json","");
+    file_put_contents($root."/Player/Questions/currentQuestion.json","");
     foreach (glob($root."/Quizmaster/currentBlock/*.*") as $value){
-        array_push($runningGame, $value);
-    }
-    foreach(glob($root."/Player/Questions/*.*") as $item) {
-        array_push($runningGame, $item);
-    }
-    foreach ($runningGame as $element) {
-        unlink($element);
+        unlink($value);
     }
     header("Location:gameAdminView.php");
 }
