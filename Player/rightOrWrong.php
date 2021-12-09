@@ -20,7 +20,7 @@ $block = $currentArray['Block']; // Fragen zählen
 // FRAGE RICHTIG
 if ($_SESSION['correct'] == "true") {
     echo "<div class='questionsBlock'>
-                <h1>Du hast die Frage richtig beantwortet</h1>
+                <h1>Du hast die Frage richtig beantwortet!</h1>
               </div><div class='questions'>
               <br><p>$name?</p>";
     checkImage($block, $name, "..");
@@ -28,8 +28,7 @@ if ($_SESSION['correct'] == "true") {
         echo "<div class='correctAnswer'><p>Deine Antwort: $yourAnswer ist richtig!</p></div></div>";
     }
     elseif ($block == 2) {
-        $usedArray = $_SESSION['shuffledArray'];
-        foreach ($usedArray as $key => $value) {
+        foreach ($currentArray['Answers'] as $key => $value) {
             if($value == $yourAnswer) {
                 echo "<button class='btn btn-success answerButtons' type='submit' formmethod='post' formaction='checkWinner.php' name='answer' value='$value'>$value</button>";
             }
@@ -40,7 +39,6 @@ if ($_SESSION['correct'] == "true") {
         echo "</div>";
     }
     $_SESSION['played'] = false; // DIRTY FIX
-    // $_SESSION['correct'] = false;
 }
 // FRAGE FALSCH
 else {
@@ -53,8 +51,7 @@ else {
         echo "<div class='wrongAnswer'><p>Deine Antwort: $yourAnswer ist falsch!</p></div></div>";
     }
     elseif ($block == 2) {
-        $usedArray = $_SESSION['shuffledArray'];
-        foreach ($usedArray as $key => $value) {
+        foreach ($currentArray['Answers'] as $key => $value) {
             if($value == $rightAnswer) {
                 echo "<button class='btn btn-success answerButtons' type='submit' formmethod='post' formaction='checkWinner.php' name='answer' value='$value'>$value</button>";
             } elseif ($value == $yourAnswer){
@@ -66,6 +63,17 @@ else {
         echo "</div>";
     }
 }
-echo "<form><button class='btn btn-dark' type='submit' formmethod='post' formaction='playerInterface.php'>Nächste Frage</button></form>";
+
+file_put_contents($root."/Player/Questions/currentQuestion.json","");
+
+echo "<form id='autoSub' action='playerInterface.php'>
+        <button class='btn btn-dark' hidden='hidden' type='submit' formmethod='post' formaction='playerInterface.php'>Nächste Frage</button>
+      </form>";
+
+echo "<script>
+        window.setTimeout(function() {
+            document.getElementById('autoSub').submit() }
+            , 9000);
+</script>";
 
 closeSide();

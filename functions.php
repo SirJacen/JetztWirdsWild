@@ -300,6 +300,7 @@ function checkImage($block, $nameQuestion, $pathToRoot){
     foreach ($workingArray as $value){
         $name = str_replace($dir."/", '',$value);
         $name = preg_replace("/[.].+/", '', $name);
+        $name = str_replace(" ","", $name);// Klaut alle Leerzeichen
         $tmpArray = [$name => $value];
         array_push($namedArray, $tmpArray);
     }
