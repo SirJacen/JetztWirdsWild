@@ -27,8 +27,7 @@ function checkIfGameRunning(){
     elseif (isset($fileArray['0'])) {
         $file = $fileArray['0'];
         if (file_exists($file)) {
-            showCurrentBlockandQuestion("../..");
-            pointsAjax("../..");
+            allInclusiveAJAX("../..");
             overwatchGame();
         }
     } else {

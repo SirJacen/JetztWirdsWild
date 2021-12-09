@@ -71,7 +71,6 @@ div {
     border-color: #343A40;
     background-color: #343A40;
     font-size: larger;
-
 }
 
 .questions {
@@ -147,6 +146,7 @@ input[type='number']{
     color: #343A40;
     background-color: #343A40;
     width: 50%;
+    height: 20px;
     margin: auto;
     border-style: solid;
     border-radius: 4px;

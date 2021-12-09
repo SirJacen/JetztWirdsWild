@@ -382,32 +382,6 @@ function isGameRunning(): bool
     }
 }
 
-function pointsAjax($pathToRoot){
-    echo '
-       <body onload="pointsAJAX(); setInterval(function(){pointsAJAX()}, 5000);">
-        <div class ="pointContainer">
-        <div class ="points" id="player1">Spieler 1: 0 Punkte</div>
-        <div class ="points" id="player2">Spieler 1: 0 Punkte</div>
-        </div><br><br>
-        <script>
-            function pointsAJAX () {
-                let xhttp = new XMLHttpRequest();
-                xhttp.onreadystatechange = function (){
-                    if (this.readyState === 4 && this.status === 200){
-                        let myArrayStr = JSON.stringify(this.responseText).replace(/("\D*[1-2]\D*")/g, "");
-                        let myArrayStr2 = myArrayStr.match(/\D\d+/g);
-                        let player1 = myArrayStr.replace(/\D.*/g, "");
-                        let player2 = myArrayStr2[0].replace(/\D/g,"");
-                        document.getElementById("player1").innerHTML = "Spieler 1: " + player1 + " Punkte<br>";
-                        document.getElementById("player2").innerHTML = "Spieler 2: " + player2 + " Punkte<br>";
-                    }
-                };
-                xhttp.open("GET","'.$pathToRoot.'/Player/playerPoints.json", true);
-                xhttp.send();
-            }
-        </script>
-    ';
-}
 
 function checkQuestionNumber($block){
     $root = $_SERVER['DOCUMENT_ROOT'];
@@ -487,48 +461,107 @@ function AJAXquizmaster(){
 
 /**
  * @param $pathToRoot
- * TODO
- *
- *
  */
-function showCurrentBlockandQuestion($pathToRoot){
-    $root = $_SERVER['DOCUMENT_ROOT'];
-    $dir = $root ."/Quizmaster/currentBlock/";
-    $dirGame = $root."/Bloecke/runningGame";
-    $fileArray = glob($dir."*.json");
-    $playedGames = json_decode(file_get_contents($dirGame."/currentGame.json"));
-    $file = $fileArray['0'];
-    $file = str_replace("\\", "/", $file );
-    $dir = str_replace("\\", "/", $dir);
+function pointsAjax($pathToRoot){
+    echo '<body onload="pointsAJAX(); setInterval(function(){pointsAJAX()}, 5000);">';
+    internalPointsAJAX($pathToRoot);
+}
 
-    $indexCounter = 1;
-    $name = str_replace($dir . "questionsB", '', $file);
-    $name = str_replace(".json", '', $name);
-    $currentNumber = checkQuestionNumber($name);
-    echo "Aktuell wird Block $name mit Frage $currentNumber gespielt<br><br>";
-    foreach ($playedGames as $game) {
-        if ($game !== $name) {
-            echo "Das $indexCounter. Spiel war Block $game.<br>";
-            $indexCounter ++;
-        }
-    }
+/**
+ * @param $pathToRoot
+ */
+function internalPointsAJAX($pathToRoot){
     echo '
-       <body onload="infoAJAX(); setInterval(function(){infoAJAX()}, 5000);">
-        <div id="test">test</div>
-        <br><br>
+        <div class ="pointContainer">
+        <div class ="points" id="player1">Spieler 1: 0 Punkte</div>
+        <div class ="points" id="player2">Spieler 1: 0 Punkte</div>
+        </div><br><br>
         <script>
-            function infoAJAX () {
+            function pointsAJAX () {
                 let xhttp = new XMLHttpRequest();
                 xhttp.onreadystatechange = function (){
                     if (this.readyState === 4 && this.status === 200){
-                        let myArrayStr = JSON.stringify(this.responseText);
-                        let myArray = myArrayStr.match(/"block\.\.:\d\D*"/g)
-                        document.getElementById("test").innerHTML =myArray["0"];
+                        let myArrayStr = JSON.stringify(this.responseText).replace(/("\D*[1-2]\D*")/g, "");
+                        let myArrayStr2 = myArrayStr.match(/\D\d+/g);
+                        let player1 = myArrayStr.replace(/\D.*/g, "");
+                        let player2 = myArrayStr2[0].replace(/\D/g,"");
+                        document.getElementById("player1").innerHTML = "Spieler 1: " + player1 + " Punkte<br>";
+                        document.getElementById("player2").innerHTML = "Spieler 2: " + player2 + " Punkte<br>";
                     }
                 };
-                xhttp.open("GET","'.$pathToRoot.'/Player/Questions/currentQuestion.json", true);
+                xhttp.open("GET","'.$pathToRoot.'/Player/playerPoints.json", true);
                 xhttp.send();
             }
         </script>
     ';
+}
+
+/**
+ * @param $pathToRoot
+ *
+ */
+function showCurrentBlockAndQuestion($pathToRoot){
+    echo '<body onload="infoAJAX(); setInterval(function(){infoAJAX()}, 5000);">';
+    internalShowCurrentBlockAndQuestion($pathToRoot);
+}
+
+function internalShowCurrentBlockAndQuestion($pathToRoot){
+    echo '
+        <div class="questionsBlock" id="current"></div>
+        <div class="questions">
+        <div id="pre1"></div>
+        <div id="pre2"></div>
+        <div id="pre3"></div>
+        </div>
+        <br><br>
+        <script>
+            function infoAJAX () 
+            {
+                let infohttp = new XMLHttpRequest();
+                infohttp.onreadystatechange = function (){
+                    if (this.readyState === 4 && this.status === 200){
+                        let myArrayStr = JSON.stringify(this.responseText).replace(/\D/g, ""); 
+                        let block = myArrayStr.slice(-1);
+                        checkCurrentQuestion(block);
+                        let previousBlock1 = myArrayStr.slice(-2,-1);
+                        if (previousBlock1 !== ""){
+                            document.getElementById("pre1").innerHTML = "Das vorherige Spiel war Block " +previousBlock1;
+                        }
+                        
+                        let previousBlock2 = myArrayStr.slice(-3,-2);
+                        if (previousBlock2 !== ""){
+                            document.getElementById("pre2").innerHTML = "Das Spiel vor dem vorherigem Spiel war Block " +previousBlock2;
+                        }
+                        
+                        let previousBlock3 = myArrayStr.slice(-4,-3);
+                        if (previousBlock3 !== ""){
+                            document.getElementById("pre3").innerHTML = "Das 1. Spiel war Block " +previousBlock3;
+                        }
+                    }
+                };
+                infohttp.open("GET","'.$pathToRoot.'/Bloecke/runningGame/currentGame.json", true);
+                infohttp.send();
+            }
+            
+            function checkCurrentQuestion(block)
+            {
+                let questionhttp = new XMLHttpRequest();
+                questionhttp.onreadystatechange = function (){
+                    if (this.readyState === 4 && this.status === 200){
+                        let questArray = JSON.parse(this.responseText);
+                        let currentQuestion = questArray["Block"+block];
+                        document.getElementById("current").innerHTML = "Aktuell wird Block " +block+ " mit Frage " +currentQuestion;
+                    }
+                }
+                questionhttp.open("GET","'.$pathToRoot.'/Bloecke/runningGame/questionNumber.json", true);
+                questionhttp.send();
+            }
+        </script>
+    ';
+}
+
+function allInclusiveAJAX($pathToRoot){
+    echo '<body onload="infoAJAX(); pointsAJAX(); setInterval(function(){infoAJAX()}, 5000); setInterval(function(){pointsAJAX()}, 5000);">';
+    internalPointsAJAX($pathToRoot);
+    internalShowCurrentBlockAndQuestion($pathToRoot);
 }

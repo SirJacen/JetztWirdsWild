@@ -72,9 +72,9 @@ if(!$arrayIsEmpty) {
                 echo "<input type='hidden' name='pos$key' value='$value'>";
             }
         }
-        echo "<p class='hiddenText'>Antwort 1</p><br><p class='hiddenText'>Antwort 2</p><br>
-              <p class='hiddenText'>Antwort 3</p><br><p class='hiddenText'>Antwort 4</p><br>
-              <p class='hiddenText'>Antwort 5</p><br>";
+        echo "<p class='hiddenText'></p><br><p class='hiddenText'></p><br>
+              <p class='hiddenText'></p><br><p class='hiddenText'></p><br>
+              <p class='hiddenText'></p><br>";
         echo "<textarea name='answer' placeholder='Hier die Antwort eingeben' required></textarea> 
               <br> 
               <button class='btn btn-dark' type='submit' formmethod='post' formaction='checkWinner.php'>Bestätigen</button>
