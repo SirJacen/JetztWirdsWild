@@ -18,10 +18,8 @@ closeSide();
 function checkIfGameRunning(){
     $root = $_SERVER['DOCUMENT_ROOT'];
     $dir = $root ."/Quizmaster/currentBlock/";
-    $dirGame = $root."/Bloecke/runningGame";
     $fileArray = glob($dir."*.json");
-    $playedGames = json_decode(file_get_contents($dirGame."/currentGame.json"));
-    $indexCounter = 1;
+
 
     if(isset($fileArray['1'])){
         echo "Zu viele Dateien im Ordner. Kann nicht feststellen welches Spiel läuft!";
@@ -29,16 +27,7 @@ function checkIfGameRunning(){
     elseif (isset($fileArray['0'])) {
         $file = $fileArray['0'];
         if (file_exists($file)) {
-            $name = str_replace($dir . "questionsB", '', $file);
-            $name = str_replace(".json", '', $name);
-            $currentNumber = checkQuestionNumber($name);
-            echo "Aktuell wird Block $name mit Frage $currentNumber gespielt<br><br>";
-            foreach ($playedGames as $game) {
-                if ($game !== $name) {
-                    echo "Das $indexCounter. Spiel war Block $game.<br>";
-                    $indexCounter ++;
-                }
-            }
+            showCurrentBlockandQuestion("../..");
             pointsAjax("../..");
             overwatchGame();
         }

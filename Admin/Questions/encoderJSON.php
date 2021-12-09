@@ -19,7 +19,17 @@ if($block == 1 || $block == 3) {
     ];
 } elseif($block == 4){
     $frage = [
-        "questionName" => $_POST['questionName']
+        "questionName" => $_POST['questionName'],
+        "mostOftenAnswer" => $_POST['mostOftenAnswer'],
+        "mostOftenAnswerPercentage" => $_POST['mostOftenAnswerPercentage'],
+        "oftenAnswer" => $_POST['oftenAnswer'],
+        "oftenAnswerPercentage" => $_POST['oftenAnswerPercentage'],
+        "middleAnswer" => $_POST['middleAnswer'],
+        "middleAnswerPercentage" => $_POST['middleAnswerPercentage'],
+        "leastAnswer" => $_POST['leastAnswer'],
+        "leastAnswerPercentage" => $_POST['leastAnswerPercentage'],
+        "leastOftenAnswer" => $_POST['leastOftenAnswer'],
+        "leastOftenAnswerPercentage" => $_POST['leastOftenAnswerPercentage']
     ];
 }else {
     echo "<h1>OH OH</h1>";

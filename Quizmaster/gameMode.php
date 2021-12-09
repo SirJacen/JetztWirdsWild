@@ -80,13 +80,32 @@ function splitQuestions() : array
                             $sendArray = array(
                                 "questionName" => $item['questionName'],
                                 "answer" => $item['answer']);
-                        } elseif (isset($item["answerA"])) {
+                        } elseif (isset($item['answerA'])) {
                             $sendArray = array(
                                 "questionName" => $item['questionName'],
                                 "answerA" => $item['answerA'],
                                 "answerB" => $item['answerB'],
                                 "answerC" => $item['answerC'],
                                 "answerD" => $item['answerD']);
+                        } elseif (isset($item['mostOftenAnswer'])){
+                            $sendArray = array(
+                                "questionName" => $item['questionName'],
+                                //am häufigsten
+                                "questionMostOften" =>  $item['mostOftenAnswer'],
+                                "questionMostOftenPer" => $item['mostOftenAnswerPercentage'],
+                                //am 2. häufigsten
+                                "questionOften" => $item['oftenAnswer'],
+                                "questionOftenPer" => $item['oftenAnswerPercentage'],
+                                // am 3. häufigsten
+                                "questionMiddle" => $item['middleAnswer'],
+                                "questionMiddlePer" => $item['middleAnswerPercentage'],
+                                // am 2. wenigsten
+                                "questionLeast" => $item['leastAnswer'],
+                                "questionLeastPer" => $item['leastAnswerPercentage'],
+                                // am wenigsten
+                                "questionLeastOften" => $item['leastOftenAnswer'],
+                                "questionLeastOftenPer" => $item['leastOftenAnswerPercentage']
+                            );
                         }
                     }
                 }

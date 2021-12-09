@@ -211,6 +211,16 @@ function questionAufzeahlfrage($array = false, $key = false){
         $frage = false;
     }
     writeInputField("Wie lautet die Frage?","questionName", $frage);
+    writeInputField("Was wurde am meisten genannt?","mostOftenAnswer", $frage);
+    writeInputField("Percentage:","mostOftenAnswerPercentage", $frage, "number");
+    writeInputField("Wie wurde fast am meisten genannt?","oftenAnswer", $frage);
+    writeInputField("Percentage: ","oftenAnswerPercentage", $frage, "number");
+    writeInputField("Was wurde mittel häufig genannt?","middleAnswer", $frage);
+    writeInputField("Percentage: ","middleAnswerPercentage", $frage, "number");
+    writeInputField("Was wurde fast am wenigsten genannt?","leastAnswer", $frage);
+    writeInputField("Percentage:","leastAnswerPercentage", $frage, "number");
+    writeInputField("Was wurde am wenigsten genannt?","leastOftenAnswer", $frage);
+    writeInputField("Percentage: ","leastOftenAnswerPercentage", $frage, "number");
 }
 
 /**
@@ -247,7 +257,32 @@ function loadQuestions($questionKey, $item, $blockKey, $pathToRoot){
         $questionAnswerD = $item['answerD'];
         echo "<p> Frage $questionIndex: $questionName <br>=> Richtige Antwort : $questionAnswerA,
                       B: $questionAnswerB, C: $questionAnswerC, D: $questionAnswerD</p>";
-    }else {
+    } elseif (isset($item['mostOftenAnswer'])) {
+        //am häufigsten
+        $questionMostOften =  $item['mostOftenAnswer'];
+        $questionMostOftenPer = $item['mostOftenAnswerPercentage'];
+        //am 2. häufigsten
+        $questionOften = $item['oftenAnswer'];
+        $questionOftenPer = $item['oftenAnswerPercentage'];
+        // am 3. häufigsten
+        $questionMiddle = $item['middleAnswer'];
+        $questionMiddlePer = $item['middleAnswerPercentage'];
+        // am 2. wenigsten
+        $questionLeast = $item['leastAnswer'];
+        $questionLeastPer = $item['leastAnswerPercentage'];
+        // am wenigsten
+        $questionLeastOften = $item['leastOftenAnswer'];
+        $questionLeastOftenPer = $item['leastOftenAnswerPercentage'];
+
+        echo "<p> Frage $questionIndex: $questionName 
+              <br> => Am meisten genannt: $questionMostOften mit $questionMostOftenPer% 
+              <br> => Am 2. meisten genannt: $questionOften mit $questionOftenPer%
+              <br> => Am 3. meisten genannt: $questionMiddle mit $questionMiddlePer%
+              <br> => Am 2. wenigsten genannt: $questionLeast mit $questionLeastPer%
+              <br> => Am wenigsten genannt: $questionLeastOften mit $questionLeastOftenPer%                
+              ";
+
+    } else {
         echo "<p> Frage $questionIndex: $questionName</p>";
     }
     checkImage($blockKey, $questionName, $pathToRoot);
@@ -361,7 +396,7 @@ function pointsAjax($pathToRoot){
                     if (this.readyState === 4 && this.status === 200){
                         let myArrayStr = JSON.stringify(this.responseText).replace(/("\D*[1-2]\D*")/g, "");
                         let myArrayStr2 = myArrayStr.match(/\D\d+/g);
-                        let player1 = myArrayStr.replace(/(\D.*)/g, "");
+                        let player1 = myArrayStr.replace(/\D.*/g, "");
                         let player2 = myArrayStr2[0].replace(/\D/g,"");
                         document.getElementById("player1").innerHTML = "Spieler 1: " + player1 + " Punkte<br>";
                         document.getElementById("player2").innerHTML = "Spieler 2: " + player2 + " Punkte<br>";
@@ -394,7 +429,11 @@ function openFile($pfad) : array{
         $answerArray = [$openedFile -> answerA, $openedFile -> answerB, $openedFile -> answerC, $openedFile -> answerD];
     }
     else {
-        $answerArray = NULL;
+        $answerArray = [$openedFile -> questionMostOften, $openedFile -> questionOften, $openedFile -> questionMiddle,
+                        $openedFile -> questionLeast, $openedFile -> questionLeastOften,
+                        "Percentage" => [$openedFile -> questionMostOftenPer, $openedFile -> questionOftenPer,
+                                         $openedFile -> questionMiddlePer, $openedFile -> questionLeastPer,
+                                         $openedFile -> questionLeastOftenPer]];
     }
     $questionNumber = checkQuestionNumber($block);
     return ["Block" => $block, "Question" => $questionName, "Answers" => $answerArray, "Number" => $questionNumber];
@@ -445,3 +484,51 @@ function AJAXquizmaster(){
 
 }
  */
+
+/**
+ * @param $pathToRoot
+ * TODO
+ *
+ *
+ */
+function showCurrentBlockandQuestion($pathToRoot){
+    $root = $_SERVER['DOCUMENT_ROOT'];
+    $dir = $root ."/Quizmaster/currentBlock/";
+    $dirGame = $root."/Bloecke/runningGame";
+    $fileArray = glob($dir."*.json");
+    $playedGames = json_decode(file_get_contents($dirGame."/currentGame.json"));
+    $file = $fileArray['0'];
+    $file = str_replace("\\", "/", $file );
+    $dir = str_replace("\\", "/", $dir);
+
+    $indexCounter = 1;
+    $name = str_replace($dir . "questionsB", '', $file);
+    $name = str_replace(".json", '', $name);
+    $currentNumber = checkQuestionNumber($name);
+    echo "Aktuell wird Block $name mit Frage $currentNumber gespielt<br><br>";
+    foreach ($playedGames as $game) {
+        if ($game !== $name) {
+            echo "Das $indexCounter. Spiel war Block $game.<br>";
+            $indexCounter ++;
+        }
+    }
+    echo '
+       <body onload="infoAJAX(); setInterval(function(){infoAJAX()}, 5000);">
+        <div id="test">test</div>
+        <br><br>
+        <script>
+            function infoAJAX () {
+                let xhttp = new XMLHttpRequest();
+                xhttp.onreadystatechange = function (){
+                    if (this.readyState === 4 && this.status === 200){
+                        let myArrayStr = JSON.stringify(this.responseText);
+                        let myArray = myArrayStr.match(/"block\.\.:\d\D*"/g)
+                        document.getElementById("test").innerHTML =myArray["0"];
+                    }
+                };
+                xhttp.open("GET","'.$pathToRoot.'/Player/Questions/currentQuestion.json", true);
+                xhttp.send();
+            }
+        </script>
+    ';
+}
