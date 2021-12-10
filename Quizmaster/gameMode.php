@@ -106,18 +106,8 @@ function splitQuestions() : array
             }
         }
     }
-    //print_r($sendArray);
     return $sendArray;
 }
-
-/**function makeChoices($array)
-{
-    foreach ($array as $question) {
-        $counter = 0;
-        echo "<input type='radio' id='question' name='$counter' value='on'>
-         <label for='html'>$question</label><br>";
-    }
-}*/
 
 function checkBlock(): ?int{
     $block = 1;
@@ -167,14 +157,6 @@ function openQuestion($block): array
 
 }
 
-function noGameOptions(){
-    echo"
-        <form>
-              <button class='btn btn-dark' formmethod='post' type='submit' name='check' value='on' formaction='gameMode.php'>Fragen checken</button>
-              </form>
-    ";
-}
-
 function sendGameOptions(){
     if (file_exists(glob("./currentBlock/questionsB*.json")['0'])) {
         $array = json_decode(file_get_contents(glob("./currentBlock/questionsB*.json")['0']), true);
@@ -221,7 +203,7 @@ function logPoints() : array{
    return json_decode(file_get_contents("../Player/playerPoints.json"), true);
 }
 
-function whoWon($beforePoints){
+function whoWon($beforePoints){ //Verzögern, wird zu früh ausgeführt
     $currentPoints = logPoints();
     if ($beforePoints['Player1'] == $currentPoints['Player1']){
         if ($beforePoints['Player2'] == $currentPoints['Player2']){

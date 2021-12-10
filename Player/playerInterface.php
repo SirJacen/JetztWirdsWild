@@ -33,7 +33,7 @@ if ($_POST['check'] == "true"){
         echo "<div class='questionsBlock'><h1>Block $block: Frage $currentNumber</h1>
           </div>
           <div class='questions'><br><div id='blockedIndicator'></div>
-          <p>$name</p><div id='formStart'><form></div>";
+          <p>$name</p><form><p id='formended'></p>";
         checkImage($block, $name, "..");
         echo "<input type='hidden' name='player' value='1'>";
 
@@ -45,7 +45,7 @@ if ($_POST['check'] == "true"){
               <br><br> 
               <button id='answerButton' class='btn btn-dark' type='submit' formmethod='post' formaction='playerInterface.php' name='check' value='true'>
               Bestätigen</button>
-              </form></d>";
+              </form></div>";
         } elseif ($block == 3) { // Allgemeinfragen
             $rightAnswer = $currentArray['Answers']['0'];
             $_SESSION['rightAnswer'] = $currentArray['Answers']['0'];

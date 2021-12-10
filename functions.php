@@ -492,7 +492,6 @@ function internalShowCurrentBlockAndQuestion($pathToRoot){
                     if (this.readyState === 4 && this.status === 200){
                         let thisArray = JSON.parse(this.responseText);
                         let length = Object.keys(thisArray).length;
-                        console.log(thisArray, length);
                         if (currentQuestion === length)
                         {
                             document.getElementById("current").innerHTML = "Aktuell wird Block " +block+ " mit Frage " +currentQuestion+" !LETZTE FRAGE!";
@@ -509,9 +508,9 @@ function internalShowCurrentBlockAndQuestion($pathToRoot){
 }
 
 function allInclusiveAJAX($pathToRoot, $blocked = false){
-    if ($blocked === true){
-        echo '<body onload="infoAJAX(); pointsAJAX(); blockingAJAX() setInterval(function(){infoAJAX()}, 5000); 
-              setInterval(function(){pointsAJAX()}, 5000); setInterval(function(){blockingAJAX()}, 1000)">';
+    if ($blocked == "true"){
+        echo '<body onload="infoAJAX(); pointsAJAX(); blockingAJAX(); setInterval(function(){infoAJAX()}, 5000); 
+              setInterval(function(){pointsAJAX()}, 5000); setInterval(function(){blockingAJAX()}, 1000);">';
         internalPointsAJAX($pathToRoot);
         internalShowCurrentBlockAndQuestion($pathToRoot);
         adminBlockingAJAX($pathToRoot);
@@ -605,9 +604,13 @@ function internalIfBlocked($pathToRoot, $playerID)
                     let blocked = JSON.parse(this.responseText);
                     console.log(blocked);
                     if (blocked["Player'.$playerID.'"] === "true"){
-                        document.getElementById("formStart").innerHTML = "";
+                        document.getElementById("answerButton").setAttribute("type", "reset");
                         document.getElementById("answerButton").className = "btn btn-secondary";
-                        document.getElementById("blockedIndicator").innerHTML = "<h3>BLOCKED</h3>"
+                        document.getElementById("blockedIndicator").innerHTML = "<h3>BLOCKED</h3>";
+                    } else {
+                        document.getElementById("answerButton").setAttribute("type", "submit");
+                        document.getElementById("answerButton").className = "btn btn-dark";
+                        document.getElementById("blockedIndicator").innerHTML = "";
                     }
                 }
             }
@@ -626,8 +629,11 @@ function blockedPoints($pathToRoot, $playerID){
 
 function adminBlockingAJAX($pathToRoot){
     echo '
-        <button id="button1" onclick=""></button>
-        <button id="button2" onclick=""></button>
+        <form>
+        <button id="button1" type="submit" formmethod="post" formaction="'.$pathToRoot.'/Admin/blocker.php" name="player1" value="">ERROR</button>
+        <button id="button2" type="submit" formmethod="post" formaction="'.$pathToRoot.'/Admin/blocker.php" name="player2" value="">ERROR</button>
+        </form>
+        <br><br>
         <script>
             function blockingAJAX(){
                 let blockinghttp = new XMLHttpRequest();
@@ -636,24 +642,24 @@ function adminBlockingAJAX($pathToRoot){
                         let object = JSON.parse(this.responseText);
                         if (object["Player1"] === "false"){
                             let boolean = "true"
-                            document.getElementById("button1").setAttribute("onclick", "sendBlock("+boolean+");")
+                            document.getElementById("button1").setAttribute("value", boolean)
                             document.getElementById("button1").className = "btn btn-success"
                             document.getElementById("button1").innerHTML = "Blockieren"
                         } else {
                             let boolean = "false"
-                            document.getElementById("button1").setAttribute("onclick", "sendBlock("+boolean+");")
+                            document.getElementById("button1").setAttribute("value", boolean)
                             document.getElementById("button1").className = "btn btn-danger"
                             document.getElementById("button1").innerHTML = "BLOCKED"
                         }
                         
                         if (object["Player2"] === "false"){
-                            let boolean = "true"
-                            document.getElementById("button2").setAttribute("onclick", "sendBlock("+boolean+");")
+                            let boolean = "true";
+                            document.getElementById("button2").setAttribute("value", boolean)
                             document.getElementById("button2").className = "btn btn-success"
                             document.getElementById("button2").innerHTML = "Blockieren"
                         } else {
                             let boolean = "false"
-                            document.getElementById("button2").setAttribute("onclick", "sendBlock("+boolean+");")
+                            document.getElementById("button2").setAttribute("value", boolean)
                             document.getElementById("button2").className = "btn btn-danger"
                             document.getElementById("button2").innerHTML = "BLOCKED"
                         }
@@ -661,10 +667,6 @@ function adminBlockingAJAX($pathToRoot){
                 }
                 blockinghttp.open("GET", "'.$pathToRoot.'/Bloecke/runningGame/blocked.json", true);
                 blockinghttp.send();
-            }
-            
-            function sendBlock(playerID){
-                
             }
         </script>
     ';
