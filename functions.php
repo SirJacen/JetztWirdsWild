@@ -396,8 +396,9 @@ function pointsAjax($pathToRoot){
 
 /**
  * @param $pathToRoot
+ * TODO
  */
-function internalPointsAJAX($pathToRoot){
+function internalPointsAJAX($pathToRoot){ // Need to check again, seems to be not quite right
     echo '
         <div class ="pointContainer">
         <div class ="points" id="player1">Spieler 1: 0 Punkte</div>
@@ -507,10 +508,19 @@ function internalShowCurrentBlockAndQuestion($pathToRoot){
     ';
 }
 
-function allInclusiveAJAX($pathToRoot){
-    echo '<body onload="infoAJAX(); pointsAJAX(); setInterval(function(){infoAJAX()}, 5000); setInterval(function(){pointsAJAX()}, 5000);">';
-    internalPointsAJAX($pathToRoot);
-    internalShowCurrentBlockAndQuestion($pathToRoot);
+function allInclusiveAJAX($pathToRoot, $blocked = false){
+    if ($blocked === true){
+        echo '<body onload="infoAJAX(); pointsAJAX(); blockingAJAX() setInterval(function(){infoAJAX()}, 5000); 
+              setInterval(function(){pointsAJAX()}, 5000); setInterval(function(){blockingAJAX()}, 1000)">';
+        internalPointsAJAX($pathToRoot);
+        internalShowCurrentBlockAndQuestion($pathToRoot);
+        adminBlockingAJAX($pathToRoot);
+    }else {
+        echo '<body onload="infoAJAX(); pointsAJAX(); setInterval(function(){infoAJAX()}, 5000); 
+              setInterval(function(){pointsAJAX()}, 5000);">';
+              internalPointsAJAX($pathToRoot);
+              internalShowCurrentBlockAndQuestion($pathToRoot);
+    }
 }
 
 function waitForAJAX($pathToRoot){
@@ -612,4 +622,50 @@ function blockedPoints($pathToRoot, $playerID){
     echo '<body onload="blockedAJAX; pointsAJAX(); setInterval(function (){blockedAJAX()}, 1000); setInterval(function(){pointsAJAX()}, 5000);">';
     internalPointsAJAX($pathToRoot);
     internalIfBlocked($pathToRoot, $playerID);
+}
+
+function adminBlockingAJAX($pathToRoot){
+    echo '
+        <button id="button1" onclick=""></button>
+        <button id="button2" onclick=""></button>
+        <script>
+            function blockingAJAX(){
+                let blockinghttp = new XMLHttpRequest();
+                blockinghttp.onreadystatechange = function (){
+                    if (this.readyState === 4 && this.status === 200){
+                        let object = JSON.parse(this.responseText);
+                        if (object["Player1"] === "false"){
+                            let boolean = "true"
+                            document.getElementById("button1").setAttribute("onclick", "sendBlock("+boolean+");")
+                            document.getElementById("button1").className = "btn btn-success"
+                            document.getElementById("button1").innerHTML = "Blockieren"
+                        } else {
+                            let boolean = "false"
+                            document.getElementById("button1").setAttribute("onclick", "sendBlock("+boolean+");")
+                            document.getElementById("button1").className = "btn btn-danger"
+                            document.getElementById("button1").innerHTML = "BLOCKED"
+                        }
+                        
+                        if (object["Player2"] === "false"){
+                            let boolean = "true"
+                            document.getElementById("button2").setAttribute("onclick", "sendBlock("+boolean+");")
+                            document.getElementById("button2").className = "btn btn-success"
+                            document.getElementById("button2").innerHTML = "Blockieren"
+                        } else {
+                            let boolean = "false"
+                            document.getElementById("button2").setAttribute("onclick", "sendBlock("+boolean+");")
+                            document.getElementById("button2").className = "btn btn-danger"
+                            document.getElementById("button2").innerHTML = "BLOCKED"
+                        }
+                    }
+                }
+                blockinghttp.open("GET", "'.$pathToRoot.'/Bloecke/runningGame/blocked.json", true);
+                blockinghttp.send();
+            }
+            
+            function sendBlock(playerID){
+                
+            }
+        </script>
+    ';
 }
