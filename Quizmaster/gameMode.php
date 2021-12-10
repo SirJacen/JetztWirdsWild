@@ -11,38 +11,24 @@ openSide("..");
 addQuicklinks("Quizmaster");
 pointsAjax("..");
 
-if($_POST['result']=="on") { // Bearbeiten mit AJAX
-    if(checkResult() != false) {
-        winnerCalc(ResultPath);
-        noGameOptions();
-    }
-    else {
-        runGameOptions();
-    }
+checkQuestions();
+if ($_POST['aufloesen']=="true"){
+    $points = logPoints();
+    file_put_contents("../Bloecke/runningGame/continue.json", json_encode("true"));
+    whoWon($points);
+    sendGameOptions();
 }
 elseif($_POST['senden']=="on"){
-    checkQuestions();
+    file_put_contents("../Bloecke/runningGame/continue.json", json_encode("false"));
     sendQuestion(splitQuestions(), checkBlock());
     runGameOptions();
 }
-elseif($_POST['check']=="on") {
-    checkQuestions();
-    sendGameOptions();
-}
 else{
-    noGameOptions();
+    sendGameOptions();
 }
 closeSide();
 
 //-------------------------------------------------
-
-function checkResult() :bool{
-    $ret = false;
-    if(file_exists(ResultPath)){
-        $ret = true;
-    }
-    return $ret;
-}
 
 function sendQuestion($array, $block){
     $addBlock = array("block"=>$block);
@@ -197,14 +183,12 @@ function sendGameOptions(){
         echo "Die Letzte Frage wurde gespielt <br>
         <form>
               <button class='btn btn-dark' formmethod='post' type='submit' formaction='gameMode.php'>Nächsten Block wählen</button>
-              <button class='btn btn-dark' formmethod='post' type='submit' name='result' value='on' formaction='gameMode.php'>Ergebnisse</button>
               </form>
         ";
     } else {
         echo "
         <form>
               <button class='btn btn-dark' formmethod='post' type='submit' name='senden' value='on' formaction='gameMode.php'>Frage senden</button>
-              <button class='btn btn-dark' formmethod='post' type='submit' name='check' value='on' formaction='gameMode.php'>Fragen checken</button>
               </form>
     ";
     }
@@ -219,17 +203,35 @@ function runGameOptions(){
     if (empty($array)){
         echo "Die Letzte Frage wurde gespielt<br>
         <form>
-              <button class='btn btn-dark' formmethod='post' type='submit' formaction='gameMode.php'>Nächsten Block wählen</button>
-              <button class='btn btn-dark' formmethod='post' type='submit' name='result' value='on' formaction='gameMode.php'>Ergebnisse</button>
+              <button class='btn btn-dark' formmethod='post' type='submit' name='aufloesen' value='true' formaction='gameMode.php'>Auflösen</button>
               </form>
         ";
     } else {
         echo "Das Spiel läuft !<br>
         <form>
-              <button class='btn btn-dark' formmethod='post' type='submit' name='senden' value='on' formaction='gameMode.php'>Nächste Frage senden</button>
-              <button class='btn btn-dark' formmethod='post' type='submit' name='result' value='on' formaction='gameMode.php'>Ergebnisse</button>
+              <button class='btn btn-dark' formmethod='post' type='submit' name='aufloesen' value='true' formaction='gameMode.php'>Auflösen</button>
               </form>
         ";
     }
 }
 
+function logPoints() : array{
+   return json_decode(file_get_contents("../Player/playerPoints.json"), true);
+}
+
+function whoWon($beforePoints){
+    $currentPoints = logPoints();
+    if ($beforePoints['Player1'] == $currentPoints['Player1']){
+        if ($beforePoints['Player2'] == $currentPoints['Player2']){
+            echo "<h3>KEINER GEWINNT</h3>";
+        } else {
+            echo "<h3>PLAYER 2 WINS</h3>";
+        }
+    } else {
+        if ($beforePoints['Player2'] !== $currentPoints['Player2']){
+            echo "<h3>BEIDE GEWINNEN</h3>";
+        } else {
+            echo "<h3>PLAYER 1 WINS</h3>";
+        }
+    }
+}

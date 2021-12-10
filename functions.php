@@ -337,34 +337,6 @@ function addQuicklinks($user, $pathIndicator = ".") {
     echo "</div></section><br>";
 }
 
-function winnerResult($winner1,$winner2 = false ){
-    if($winner2==false){
-        if($winner1==1) {
-            echo"<h1 style = 'background-color:MediumSeaGreen;' > Player 1 </h1 >
-                 <h1 style = 'background-color:Tomato;' > Player 2 </h1 >";
-        }elseif($winner1==2) {
-            echo"<h1 style = 'background-color:Tomato;' > Player 1 </h1 >
-                 <h1 style = 'background-color:MediumSeaGreen;' > Player 2 </h1 >";
-        }
-    }else {
-        echo "<h1 style = 'background-color:MediumSeaGreen;' > Player 1 </h1 >
-         <h1 style = 'background-color:MediumSeaGreen;' > Player 2 </h1 >";
-    }
-}
-
-function winnerCalc($answerFile){
-    $answers = json_decode($answerFile);
-    $anwersPlayer1 = $answers["Player1"];
-    $answersPlayer2 = $answers["Player2"];
-    if($anwersPlayer1==$answers["Answer"] && $answersPlayer2==$answers["Answer"]){
-        winnerResult(1,2);
-    }elseif($anwersPlayer1==$answers["Answer"]){
-        winnerResult(1);
-    }elseif($answersPlayer2==$answers["Answer"]){
-        winnerResult(2);
-    }
-}
-
 function playerPoints (){
     $root = $_SERVER['DOCUMENT_ROOT'];
     $playerDir = $root."/Player/playerPoints.json";
@@ -413,52 +385,6 @@ function openFile($pfad) : array{
     $questionNumber = checkQuestionNumber($block);
     return ["Block" => $block, "Question" => $questionName, "Answers" => $answerArray, "Number" => $questionNumber];
 }
-
-/**
- * @param $block
- * @TODO
- * AJAX zum Auslesen der aktuellen Fragen nummer
- *
- */
-/**
- * function questionNumberAjax($block){
-    $root = $_SERVER['DOCUMENT_ROOT'];
-    echo '
-       <body onload="questionAJAX(); setInterval(function(){questionAJAX()}, 5000);">
-        <script>
-            function questionAJAX () {
-                let xhttp = new XMLHttpRequest();
-                xhttp.onreadystatechange = function (){
-                    if (this.readyState === 4 && this.status === 200){
-                        var myArrayStr = JSON.stringify(this.responseText).replace(/\D/g, "");
-                        var block1 = myArrayStr.charAt(1);
-                        var block2 = myArrayStr.charAt(3);
-                        var block3 = myArrayStr.charAt(5);
-                        var block4 = myArrayStr.charAt(7);
-                    }
-                };
-                xhttp.open("GET","'.$root.'/Bloecke/runningGame/questionNumber.json", true);
-                xhttp.send();
-            }
-        </script>
-        <?php
-        $blockIndex = "block".$block;
-        $getValue = var $blockIndex;
-        return $getValue;
-        ?>
-    ';
-}
-*/
-
-/**
- * @TODO
- * Automatisierte Aktualisierung und Einlesung von neu gesendeten Fragenblöcken zum Quizmaster, das gleiche auch für die Spieler;
- */
-/**
-function AJAXquizmaster(){
-
-}
- */
 
 /**
  * @param $pathToRoot
@@ -551,11 +477,31 @@ function internalShowCurrentBlockAndQuestion($pathToRoot){
                     if (this.readyState === 4 && this.status === 200){
                         let questArray = JSON.parse(this.responseText);
                         let currentQuestion = questArray["Block"+block];
-                        document.getElementById("current").innerHTML = "Aktuell wird Block " +block+ " mit Frage " +currentQuestion;
+                        checkLastQuestion(block, currentQuestion);
                     }
                 }
                 questionhttp.open("GET","'.$pathToRoot.'/Bloecke/runningGame/questionNumber.json", true);
                 questionhttp.send();
+            }
+            
+            function checkLastQuestion(block, currentQuestion)
+            {
+                let lasthttp = new XMLHttpRequest();
+                lasthttp.onreadystatechange = function (){
+                    if (this.readyState === 4 && this.status === 200){
+                        let thisArray = JSON.parse(this.responseText);
+                        let length = Object.keys(thisArray).length;
+                        console.log(thisArray, length);
+                        if (currentQuestion === length)
+                        {
+                            document.getElementById("current").innerHTML = "Aktuell wird Block " +block+ " mit Frage " +currentQuestion+" !LETZTE FRAGE!";
+                        } else {
+                            document.getElementById("current").innerHTML = "Aktuell wird Block " +block+ " mit Frage " +currentQuestion;
+                        }
+                    }
+                }
+                lasthttp.open("GET", "'.$pathToRoot.'/Bloecke/"+block+"/questionsB"+block+".json", true)
+                lasthttp.send();
             }
         </script>
     ';
@@ -565,4 +511,70 @@ function allInclusiveAJAX($pathToRoot){
     echo '<body onload="infoAJAX(); pointsAJAX(); setInterval(function(){infoAJAX()}, 5000); setInterval(function(){pointsAJAX()}, 5000);">';
     internalPointsAJAX($pathToRoot);
     internalShowCurrentBlockAndQuestion($pathToRoot);
+}
+
+function waitForAJAX($pathToRoot){
+    echo '<body onload="waitAJAX(); setInterval(function(){waitAJAX()}, 1000)">';
+    internalWaitForAJAX($pathToRoot);
+}
+
+function internalWaitForAJAX($pathToRoot){
+    echo '
+        <script>
+        function waitAJAX(){
+            let waithttp = new XMLHttpRequest();
+            waithttp.onreadystatechange = function(){
+                if (this.readyState === 4 && this.status === 200){
+                    let check = JSON.parse(this.responseText);
+                    if (check === "true"){
+                        window.location = "checkWinner.php"
+                    }
+                }
+            }
+            waithttp.open("GET", "' .$pathToRoot.'/Bloecke/runningGame/continue.json", true);
+            waithttp.send();
+        }
+        
+        </script>
+    ';
+}
+
+function waitWithPoints($pathToRoot)
+{
+    echo '<body onload="waitAJAX(); pointsAJAX(); setInterval(function(){pointsAJAX()}, 5000); setInterval(function(){waitAJAX()}, 1000)">';
+    internalPointsAJAX($pathToRoot);
+    internalWaitForAJAX($pathToRoot);
+}
+
+function continueNextPageAJAX($pathToRoot)
+{
+    echo '<body onload="nextAJAX();setInterval(function(){nextAJAX()}, 1000);">';
+    internalNextPageAJAX($pathToRoot);
+}
+
+function internalNextPageAJAX($pathToRoot)
+{
+    echo '
+        <script>
+            function nextAJAX(){
+                let nexthttp = new XMLHttpRequest();
+                nexthttp.onreadystatechange = function(){
+                    if (this.readyState === 4 && this.status === 200){
+                        let check = JSON.parse(this.responseText);
+                        if (check === "false"){
+                            window.location = "playerInterface.php";
+                        }
+                    }
+                }
+                nexthttp.open("GET", "'.$pathToRoot.'/Bloecke/runningGame/continue.json", true);
+                nexthttp.send();
+            }
+        </script>
+    ';
+}
+
+function nextPagePointsAJAX($pathToRoot){
+    echo '<body onload="nextAJAX(); pointsAJAX(); setInterval(function(){nextAJAX()}, 1000); setInterval(function(){pointsAJAX()}, 5000);">';
+    internalPointsAJAX($pathToRoot);
+    internalNextPageAJAX($pathToRoot);
 }

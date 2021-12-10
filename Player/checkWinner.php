@@ -6,9 +6,9 @@ session_start();
 debugging("no");
 
 $_SESSION['played'] = true;
-$_SESSION['answer'] = $_POST['answer'];
+//$_SESSION['answer'] = $_POST['answer'];
 
-if ($_POST['answer'] == $_POST['rightAnswer']){
+if ($_SESSION['answer'] == $_SESSION['rightAnswer']){
     $currentPoints = playerPoints();
     if($_SESSION['player'] == 1) {
         $currentPoints->Player1++;
@@ -22,6 +22,4 @@ if ($_POST['answer'] == $_POST['rightAnswer']){
 } else {
     $_SESSION['correct'] = false;
 }
-//Return to either Playsite 1 or 2
-//header("Location:playerInterface.php");
 header("Location:rightOrWrong.php");

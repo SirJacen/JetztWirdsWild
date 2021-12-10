@@ -11,7 +11,7 @@ openSide("..");
 $jsonPath = CurrentQuestionPath."/currentQuestion.json";
 $currentArray = openFile($jsonPath);
 
-pointsAjax("..");
+nextPagePointsAJAX("..");
 $yourAnswer = $_SESSION['answer'];
 
 $name = $currentArray['Question'];
@@ -66,7 +66,7 @@ else {
 
 file_put_contents($root."/Player/Questions/currentQuestion.json","");
 
-echo "<form id='autoSub' action='playerInterface.php'>
+/**echo "<form id='autoSub' action='playerInterface.php'>
         <button class='btn btn-dark' hidden='hidden' type='submit' formmethod='post' formaction='playerInterface.php'>Nächste Frage</button>
       </form>";
 
@@ -74,6 +74,6 @@ echo "<script>
         window.setTimeout(function() {
             document.getElementById('autoSub').submit() }
             , 9000);
-</script>";
+</script>";*/
 
 closeSide();

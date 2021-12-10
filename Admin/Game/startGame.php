@@ -23,4 +23,8 @@ $questionNumber = ["Block1" => 0, "Block2" => 0, "Block3" => 0, "Block4" => 0];
 $numberDir = $root."/Bloecke/runningGame/questionNumber.json";
 file_put_contents($numberDir, json_encode($questionNumber));
 
+$continue = "true";
+$conDir = $root."/Bloecke/runningGame/continue.json";
+file_put_contents($conDir, json_encode($continue));
+
 header("Location: gameAdminView.php");

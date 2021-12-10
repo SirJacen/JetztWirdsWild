@@ -23,6 +23,7 @@ elseif (isset($_POST['delete'])) {
 
     file_put_contents($root."/Bloecke/runningGame/currentGame.json", "");
     file_put_contents($root."/Bloecke/runningGame/questionNumber.json","");
+    file_put_contents($root."/Bloecke/runningGame/continue.json","");
     file_put_contents($root."/Player/Questions/currentQuestion.json","");
     foreach (glob($root."/Quizmaster/currentBlock/*.*") as $value){
         unlink($value);
