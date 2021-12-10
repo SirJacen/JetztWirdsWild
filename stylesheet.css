@@ -153,3 +153,36 @@ input[type='number']{
     border-radius: 4px;
     border-color: #343A40;
 }
+
+.winnerNone {
+    color: white;
+    width: 50%;
+    margin: auto;
+    border-style: solid;
+    border-radius: 4px;
+    border-color: indianred;
+    background-color: indianred;
+    font-size: larger;
+}
+
+.winnerBoth {
+    color: white;
+    width: 50%;
+    margin: auto;
+    border-style: solid;
+    border-radius: 4px;
+    border-color: cornflowerblue;
+    background-color: cornflowerblue;
+    font-size: larger;
+}
+
+.winnerPlayer {
+    color: white;
+    width: 50%;
+    margin: auto;
+    border-style: solid;
+    border-radius: 4px;
+    border-color: forestgreen;
+    background-color: forestgreen;
+    font-size: larger;
+}

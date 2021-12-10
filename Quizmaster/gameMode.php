@@ -11,19 +11,21 @@ openSide("..");
 addQuicklinks("Quizmaster");
 pointsAjax("..");
 
-checkQuestions();
 if ($_POST['aufloesen']=="true"){
     $points = logPoints();
     file_put_contents("../Bloecke/runningGame/continue.json", json_encode("true"));
     whoWon($points);
+    checkQuestions();
     sendGameOptions();
 }
 elseif($_POST['senden']=="on"){
+    checkQuestions();
     file_put_contents("../Bloecke/runningGame/continue.json", json_encode("false"));
     sendQuestion(splitQuestions(), checkBlock());
     runGameOptions();
 }
 else{
+    checkQuestions();
     sendGameOptions();
 }
 closeSide();
@@ -223,15 +225,15 @@ function whoWon($beforePoints){
     $currentPoints = logPoints();
     if ($beforePoints['Player1'] == $currentPoints['Player1']){
         if ($beforePoints['Player2'] == $currentPoints['Player2']){
-            echo "<h3>KEINER GEWINNT</h3>";
+            echo "<div class='winnerNone'><h3>KEINER GEWINNT</h3></div>";
         } else {
-            echo "<h3>PLAYER 2 WINS</h3>";
+            echo "<div class='winnerPlayer'><h3>PLAYER 2 WINS</h3></div>";
         }
     } else {
         if ($beforePoints['Player2'] !== $currentPoints['Player2']){
-            echo "<h3>BEIDE GEWINNEN</h3>";
+            echo "<div class='winnerBoth'><h3>BEIDE GEWINNEN</h3></div>";
         } else {
-            echo "<h3>PLAYER 1 WINS</h3>";
+            echo "<div class='winnerPlayer'><h3>PLAYER 1 WINS</h3></div>";
         }
     }
 }
