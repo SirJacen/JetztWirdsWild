@@ -25,15 +25,15 @@ if ($_POST['check'] == "true"){
 
 //Show Questions
     if (!$arrayIsEmpty) {
-        pointsAjax("..");
+        blockedPoints("..", $player);
         $currentArray = openFile($jsonPath);
         $name = $currentArray['Question'];
         $block = $currentArray['Block'];
         $currentNumber = $currentArray['Number'];
         echo "<div class='questionsBlock'><h1>Block $block: Frage $currentNumber</h1>
           </div>
-          <div class='questions'><br>
-          <p>$name</p><form>";
+          <div class='questions'><br><div id='blockedIndicator'></div>
+          <p>$name</p><div id='formStart'><form></div>";
         checkImage($block, $name, "..");
         echo "<input type='hidden' name='player' value='1'>";
 
@@ -43,16 +43,16 @@ if ($_POST['check'] == "true"){
             echo "<input type='hidden' name='rightAnswer' value='$rightAnswer'>";
             echo "<input name='answer' type='number' required> 
               <br><br> 
-              <button class='btn btn-dark' type='submit' formmethod='post' formaction='playerInterface.php' name='check' value='true'>
+              <button id='answerButton' class='btn btn-dark' type='submit' formmethod='post' formaction='playerInterface.php' name='check' value='true'>
               Bestätigen</button>
-              </form></div>";
+              </form></d>";
         } elseif ($block == 3) { // Allgemeinfragen
             $rightAnswer = $currentArray['Answers']['0'];
             $_SESSION['rightAnswer'] = $currentArray['Answers']['0'];
             echo "<input type='hidden' name='rightAnswer' value='$rightAnswer'>";
             echo "<textarea name='answer' placeholder='Hier die Antwort eingeben' required></textarea> 
               <br> 
-              <button class='btn btn-dark' type='submit' formmethod='post' formaction='playerInterface.php' name='check' value='true'>Bestätigen</button>
+              <button id='answerButton' class='btn btn-dark' type='submit' formmethod='post' formaction='playerInterface.php' name='check' value='true'>Bestätigen</button>
               </form></div>";
         } elseif ($block == 2) { //Buzzerfragen
             $rightAnswer = $currentArray['Answers']['0'];
@@ -62,7 +62,7 @@ if ($_POST['check'] == "true"){
             $_SESSION['shuffledArray'] = $currentArray['Answers'];
             echo "<input type='hidden' name='check' value='true'>";
             foreach ($currentArray['Answers'] as $key => $value) {
-                echo "<button class='btn btn-dark answerButtons' type='submit' formmethod='post' formaction='playerInterface.php' name='answer' value='$value'>$value</button>";
+                echo "<button id='answerButton' class='btn btn-dark answerButtons' type='submit' formmethod='post' formaction='playerInterface.php' name='answer' value='$value'>$value</button>";
             }
             echo "</form> </div>";
         } elseif ($block == 4) { // Aufzählfragen -- still needs work
@@ -82,7 +82,7 @@ if ($_POST['check'] == "true"){
               <p class='hiddenText'></p><br>";
             echo "<textarea name='answer' placeholder='Hier die Antwort eingeben' required></textarea> 
               <br> 
-              <button class='btn btn-dark' type='submit' formmethod='post' formaction='playerInterface.php' name='check' value='true'>Bestätigen</button>
+              <button id='answerButton' class='btn btn-dark' type='submit' formmethod='post' formaction='playerInterface.php' name='check' value='true'>Bestätigen</button>
               </form></div>";
         }
     } // Wait for Questions

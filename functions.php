@@ -578,3 +578,38 @@ function nextPagePointsAJAX($pathToRoot){
     internalPointsAJAX($pathToRoot);
     internalNextPageAJAX($pathToRoot);
 }
+
+function checkIfAdminBlockedAJAX($pathToRoot, $playerID){
+    echo '<body onload="blockedAJAX(); setInterval(function (){blockedAJAX()}, 1000);">';
+    internalIfBlocked($pathToRoot, $playerID);
+}
+
+function internalIfBlocked($pathToRoot, $playerID)
+{
+    echo '
+        <script>
+        function blockedAJAX(){
+            let blockedhttp = new XMLHttpRequest();
+            blockedhttp.onreadystatechange = function (){
+                if (this.readyState === 4 && this.status === 200){
+                    let blocked = JSON.parse(this.responseText);
+                    console.log(blocked);
+                    if (blocked["Player'.$playerID.'"] === "true"){
+                        document.getElementById("formStart").innerHTML = "";
+                        document.getElementById("answerButton").className = "btn btn-secondary";
+                        document.getElementById("blockedIndicator").innerHTML = "<h3>BLOCKED</h3>"
+                    }
+                }
+            }
+            blockedhttp.open("GET", "'.$pathToRoot.'/Bloecke/runningGame/blocked.json", true);
+            blockedhttp.send();
+        }
+        </script>
+    ';
+}
+
+function blockedPoints($pathToRoot, $playerID){
+    echo '<body onload="blockedAJAX; pointsAJAX(); setInterval(function (){blockedAJAX()}, 1000); setInterval(function(){pointsAJAX()}, 5000);">';
+    internalPointsAJAX($pathToRoot);
+    internalIfBlocked($pathToRoot, $playerID);
+}
