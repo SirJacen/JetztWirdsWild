@@ -203,6 +203,10 @@ function logPoints() : array{
    return json_decode(file_get_contents("../Player/playerPoints.json"), true);
 }
 
+/**
+ * @param $beforePoints
+ * TODO
+ */
 function whoWon($beforePoints){ //Verzögern, wird zu früh ausgeführt
     $currentPoints = logPoints();
     if ($beforePoints['Player1'] == $currentPoints['Player1']){
