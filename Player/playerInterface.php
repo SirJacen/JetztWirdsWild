@@ -38,6 +38,7 @@ if ($_POST['check'] == "true"){
         echo "<input type='hidden' name='player' value='1'>";
 
         if ($block == 1) { // Schätzfragen
+            $_SESSION['guess']="true";
             $rightAnswer = $currentArray['Answers']['0'];
             $_SESSION['rightAnswer'] = $currentArray['Answers']['0'];
             echo "<input type='hidden' name='rightAnswer' value='$rightAnswer'>";
@@ -47,6 +48,7 @@ if ($_POST['check'] == "true"){
               Bestätigen</button>
               </form></div>";
         } elseif ($block == 3) { // Allgemeinfragen
+            $_SESSION['guess']="false";
             $rightAnswer = $currentArray['Answers']['0'];
             $_SESSION['rightAnswer'] = $currentArray['Answers']['0'];
             echo "<input type='hidden' name='rightAnswer' value='$rightAnswer'>";
@@ -55,6 +57,7 @@ if ($_POST['check'] == "true"){
               <button id='answerButton' class='btn btn-dark' type='submit' formmethod='post' formaction='playerInterface.php' name='check' value='true'>Bestätigen</button>
               </form></div>";
         } elseif ($block == 2) { //Buzzerfragen
+            $_SESSION['guess']="false";
             $rightAnswer = $currentArray['Answers']['0'];
             $_SESSION['rightAnswer'] = $currentArray['Answers']['0'];
             echo "<input type='hidden' name='rightAnswer' value='$rightAnswer'>";
@@ -66,6 +69,7 @@ if ($_POST['check'] == "true"){
             }
             echo "</form> </div>";
         } elseif ($block == 4) { // Aufzählfragen -- still needs work
+            $_SESSION['guess']="false";
             $rightAnswer = $currentArray['Answers'];
             $_SESSION['rightAnswer'] = $currentArray['Answers'];
             foreach ($_SESSION['rightAnswer'] as $key => $value) {
