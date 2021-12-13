@@ -671,3 +671,8 @@ function adminBlockingAJAX($pathToRoot){
         </script>
     ';
 }
+
+/**
+ * TODO
+ * Auto-Block
+ */

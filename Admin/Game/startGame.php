@@ -27,7 +27,7 @@ $continue = "true";
 $conDir = $root."/Bloecke/runningGame/continue.json";
 file_put_contents($conDir, json_encode($continue));
 
-$blocked = ["Player1" => "true", "Player2" => "false"];
+$blocked = ["Player1" => "false", "Player2" => "false"];
 $blockDir = $root."/Bloecke/runningGame/blocked.json";
 file_put_contents($blockDir, json_encode($blocked));
 

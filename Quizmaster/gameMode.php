@@ -207,7 +207,7 @@ function logPoints() : array{
  * @param $beforePoints
  * TODO
  */
-function whoWon($beforePoints){ //Verzögern, wird zu früh ausgeführt
+function whoWon($beforePoints){ //Verzögern, wird zu früh ausgeführt - SWITCH TO AJAX
     $currentPoints = logPoints();
     if ($beforePoints['Player1'] == $currentPoints['Player1']){
         if ($beforePoints['Player2'] == $currentPoints['Player2']){

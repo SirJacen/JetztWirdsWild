@@ -29,6 +29,7 @@ function checkIfGameRunning(){
         if (file_exists($file)) {
             allInclusiveAJAX("../..", "true");
             overwatchGame();
+            echo "<br>";
         }
     } else {
         echo "Es läuft kein Spiel<br><br>";

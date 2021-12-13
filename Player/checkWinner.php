@@ -50,7 +50,7 @@ if($_SESSION['guess']){
         $_SESSION['correct'] = false;
     }
 }
-//Return to either Playsite 1 or 2
+
 //header("Location:playerInterface.php");
 header("Location:rightOrWrong.php");
 
