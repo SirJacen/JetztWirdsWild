@@ -135,10 +135,11 @@ function openJSON($block, bool $quizmaster = false): array
     $root = $_SERVER['DOCUMENT_ROOT'];
     if ($quizmaster == false) {
         $dir = "$root" . "/Bloecke/" . "$block";
+        $fileName = "$dir" . "/" . "questionsB" . "$block" . ".json";
     } else {
-        $dir = $root."/Quizmaster/currentBlock";
+        $fileName  = $root."/Quizmaster/currentBlock/questionsCurrent.json";
     }
-    $fileName = "$dir" . "/" . "questionsB" . "$block" . ".json";
+
     return json_decode(file_get_contents($fileName), true);
 }
 
@@ -301,6 +302,7 @@ function checkImage($block, $nameQuestion, $pathToRoot){
         $name = str_replace($dir."/", '',$value);
         $name = preg_replace("/[.].+/", '', $name);
         $name = str_replace(" ","", $name);// Klaut alle Leerzeichen
+        $name = str_replace("?", "", $name);
         $tmpArray = [$name => $value];
         array_push($namedArray, $tmpArray);
     }
@@ -330,7 +332,6 @@ function addQuicklinks($user, $pathIndicator = ".") {
         echo "<div class='link'><a class='btn btn-dark' href='$pathIndicator\override.php'>Override</a></div>";
         echo "<div class='link'><a class='btn btn-dark' href='$pathIndicator\..\index.php'>Log Out</a></div>";
     } elseif ($user == "Quizmaster"){
-        echo "<div class='link'><a class='btn btn-dark' href='$pathIndicator\quizMasterInterface.php'>Interface</a></div>";
         echo "<div class='link'><a class='btn btn-dark' href='$pathIndicator\gameMode.php'>Gamemode</a></div>";
         echo "<div class='link'><a class='btn btn-dark' href='$pathIndicator\..\index.php'>Log Out</a></div>";
     }
@@ -346,8 +347,8 @@ function playerPoints (){
 function isGameRunning(): bool
 {
     $root = $_SERVER['DOCUMENT_ROOT'];
-    $dir = $root ."/Quizmaster/currentBlock/";
-    $fileArray = glob($dir."*.json");
+    $dir = $root ."/Quizmaster/currentBlock/questionsCurrent.json";
+    $fileArray = json_decode(file_get_contents($dir), true);
     if (isset($fileArray['0'])){
         return true;
     } else {
@@ -396,9 +397,9 @@ function pointsAjax($pathToRoot){
 
 /**
  * @param $pathToRoot
- * TODO
+ *
  */
-function internalPointsAJAX($pathToRoot){ // Need to check again, seems to be not quite right
+function internalPointsAJAX($pathToRoot){
     echo '
         <div class ="pointContainer">
         <div class ="points" id="player1">Spieler 1: 0 Punkte</div>
@@ -409,10 +410,9 @@ function internalPointsAJAX($pathToRoot){ // Need to check again, seems to be no
                 let xhttp = new XMLHttpRequest();
                 xhttp.onreadystatechange = function (){
                     if (this.readyState === 4 && this.status === 200){
-                        let myArrayStr = JSON.stringify(this.responseText).replace(/("\D*[1-2]\D*")/g, "");
-                        let myArrayStr2 = myArrayStr.match(/\D\d+/g);
-                        let player1 = myArrayStr.replace(/\D.*/g, "");
-                        let player2 = myArrayStr2[0].replace(/\D/g,"");
+                        let myArrayStr = JSON.parse(this.responseText);
+                        let player1 = myArrayStr["Player1"];
+                        let player2 = myArrayStr["Player2"];
                         document.getElementById("player1").innerHTML = "Spieler 1: " + player1 + " Punkte<br>";
                         document.getElementById("player2").innerHTML = "Spieler 2: " + player2 + " Punkte<br>";
                     }
@@ -426,12 +426,12 @@ function internalPointsAJAX($pathToRoot){ // Need to check again, seems to be no
 
 /**
  * @param $pathToRoot
- *
+ * UNUSED
  */
-function showCurrentBlockAndQuestion($pathToRoot){
+/**function showCurrentBlockAndQuestion($pathToRoot){
     echo '<body onload="infoAJAX(); setInterval(function(){infoAJAX()}, 5000);">';
     internalShowCurrentBlockAndQuestion($pathToRoot);
-}
+}*/
 
 function internalShowCurrentBlockAndQuestion($pathToRoot){
     echo '
@@ -522,10 +522,15 @@ function allInclusiveAJAX($pathToRoot, $blocked = false){
     }
 }
 
-function waitForAJAX($pathToRoot){
+
+/**
+ * @param $pathToRoot
+ * UNUSED
+ */
+/**function waitForAJAX($pathToRoot){
     echo '<body onload="waitAJAX(); setInterval(function(){waitAJAX()}, 1000)">';
     internalWaitForAJAX($pathToRoot);
-}
+}*/
 
 function internalWaitForAJAX($pathToRoot){
     echo '
@@ -548,20 +553,24 @@ function internalWaitForAJAX($pathToRoot){
     ';
 }
 
-function waitWithPoints($pathToRoot)
+/**
+ * @param $pathToRoot
+ * UNUSED
+ */
+/**function waitWithPoints($pathToRoot)
 {
     echo '<body onload="waitAJAX(); pointsAJAX(); setInterval(function(){pointsAJAX()}, 5000); setInterval(function(){waitAJAX()}, 1000)">';
     internalPointsAJAX($pathToRoot);
     internalWaitForAJAX($pathToRoot);
-}
+}*/
 
-function continueNextPageAJAX($pathToRoot)
+function continueNextPageAJAX($pathToRoot, $playerID)
 {
     echo '<body onload="nextAJAX();setInterval(function(){nextAJAX()}, 1000);">';
-    internalNextPageAJAX($pathToRoot);
+    internalNextPageAJAX($pathToRoot, $playerID);
 }
 
-function internalNextPageAJAX($pathToRoot)
+function internalNextPageAJAX($pathToRoot, $playerID)
 {
     echo '
         <script>
@@ -570,28 +579,34 @@ function internalNextPageAJAX($pathToRoot)
                 nexthttp.onreadystatechange = function(){
                     if (this.readyState === 4 && this.status === 200){
                         let check = JSON.parse(this.responseText);
-                        if (check === "false"){
+                        if (check["Player'.$playerID.'"] === "true"){
                             window.location = "playerInterface.php";
                         }
                     }
                 }
-                nexthttp.open("GET", "'.$pathToRoot.'/Bloecke/runningGame/continue.json", true);
+                nexthttp.open("GET", "'.$pathToRoot.'/Bloecke/runningGame/nextPage.json", true);
                 nexthttp.send();
             }
         </script>
     ';
 }
 
-function nextPagePointsAJAX($pathToRoot){
-    echo '<body onload="nextAJAX(); pointsAJAX(); setInterval(function(){nextAJAX()}, 1000); setInterval(function(){pointsAJAX()}, 5000);">';
+function nextPagePointsAJAX($pathToRoot, $playerID){
+    echo '<body onload="nextAJAX(); pointsAJAX(); setInterval(function(){nextAJAX()}, 1000); 
+          setInterval(function(){pointsAJAX()}, 5000);">';
     internalPointsAJAX($pathToRoot);
-    internalNextPageAJAX($pathToRoot);
+    internalNextPageAJAX($pathToRoot, $playerID);
 }
 
-function checkIfAdminBlockedAJAX($pathToRoot, $playerID){
+/**
+ * @param $pathToRoot
+ * @param $playerID
+ * UNUSED
+ */
+/**function checkIfAdminBlockedAJAX($pathToRoot, $playerID){
     echo '<body onload="blockedAJAX(); setInterval(function (){blockedAJAX()}, 1000);">';
     internalIfBlocked($pathToRoot, $playerID);
-}
+}*/
 
 function internalIfBlocked($pathToRoot, $playerID)
 {
@@ -621,15 +636,22 @@ function internalIfBlocked($pathToRoot, $playerID)
     ';
 }
 
-function blockedPoints($pathToRoot, $playerID){
-    echo '<body onload="blockedAJAX; pointsAJAX(); setInterval(function (){blockedAJAX()}, 1000); setInterval(function(){pointsAJAX()}, 5000);">';
+/**
+ * @param $pathToRoot
+ * @param $playerID
+ * UNUSED
+ */
+/**function blockedPoints($pathToRoot, $playerID){
+    echo '<body onload="blockedAJAX; pointsAJAX(); setInterval(function (){blockedAJAX()}, 1000);
+          setInterval(function(){pointsAJAX()}, 5000);">';
     internalPointsAJAX($pathToRoot);
     internalIfBlocked($pathToRoot, $playerID);
-}
+}*/
 
 function adminBlockingAJAX($pathToRoot){
     echo '
         <form>
+        <p class="btnID">Player1</p><p class="btnID">Player 2</p><br>
         <button id="button1" type="submit" formmethod="post" formaction="'.$pathToRoot.'/Admin/blocker.php" name="player1" value="">ERROR</button>
         <button id="button2" type="submit" formmethod="post" formaction="'.$pathToRoot.'/Admin/blocker.php" name="player2" value="">ERROR</button>
         </form>
@@ -672,7 +694,75 @@ function adminBlockingAJAX($pathToRoot){
     ';
 }
 
-/**
- * TODO
- * Auto-Block
- */
+function blockedNextPagePoints($pathToRoot, $playerID){
+    echo '<body onload="blockedAJAX; pointsAJAX(); nextAJAX();
+          setInterval(function (){blockedAJAX()}, 1000); 
+          setInterval(function(){pointsAJAX()}, 5000); 
+          setInterval(function(){nextAJAX()}, 1000);">';
+    internalPointsAJAX($pathToRoot);
+    internalIfBlocked($pathToRoot, $playerID);
+    internalNextPageAJAX($pathToRoot, $playerID);
+}
+
+function waitPointsNextPage($pathToRoot, $playerID){
+    echo '<body onload="waitAJAX();pointsAJAX(); nextAJAX();
+          setInterval(function(){waitAJAX()}, 1000); 
+          setInterval(function(){pointsAJAX()}, 5000); 
+          setInterval(function(){nextAJAX()}, 1000);">';
+    internalWaitForAJAX($pathToRoot);
+    internalPointsAJAX($pathToRoot);
+    internalNextPageAJAX($pathToRoot, $playerID);
+}
+
+function whoWonAJAX($pathToRoot, $beforePoints){
+    $points1 = $beforePoints["Player1"];
+    $points2 = $beforePoints["Player2"];
+    echo '
+        <p id="showWinner"></p>
+        <script>
+        function whoWon(){
+            let whohttp = new XMLHttpRequest();
+            whohttp.onreadystatechange = function(){
+                if (this.readyState === 4 && this.status === 200){
+                    let array = JSON.parse(this.responseText);
+                    let player1 = array["Player1"];
+                    let player2 = array["Player2"];
+                    if (player1 > '.$points1.'){
+                        if (player2 > '.$points2.'){
+                            document.getElementById("showWinner").className = " winnerBoth";
+                            document.getElementById("showWinner").innerHTML = "Beide haben gewonnen";
+                        } else {
+                            document.getElementById("showWinner").className = " winnerPlayer";
+                            document.getElementById("showWinner").innerHTML = "Player 1 hat gewonnen";
+                        }
+                    }
+                    if (player2 > '.$points2.'){
+                        if (player1 > '.$points1.'){
+                            document.getElementById("showWinner").className = " winnerBoth";
+                            document.getElementById("showWinner").innerHTML = "Beide haben gewonnen";
+                        } else {
+                            document.getElementById("showWinner").className = " winnerPlayer";
+                            document.getElementById("showWinner").innerHTML = "Player 2 hat gewonnen";
+                        }
+                    }
+                    if (player2 === '.$points2.' && player1 === '.$points1.' ) {
+                        document.getElementById("showWinner").className = " winnerNone";
+                        document.getElementById("showWinner").innerHTML = "Keiner hat gewonnen";
+                    }
+                }
+            }
+            
+            whohttp.open("GET", "'.$pathToRoot.'/Player/playerPoints.json", true);
+            whohttp.send();
+        }
+        
+        </script>
+    ';
+}
+
+function pointsAndWhoWon($pathToRoot, array $beforePoints){
+    echo '<body onload="pointsAJAX(); setInterval(function(){pointsAJAX()}, 5000); 
+          setTimeout(function(){whoWon()}, 5000);">';
+    internalPointsAJAX($pathToRoot);
+    whoWonAJAX($pathToRoot, $beforePoints);
+}

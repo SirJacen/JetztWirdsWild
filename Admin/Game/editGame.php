@@ -25,10 +25,12 @@ elseif (isset($_POST['delete'])) {
     file_put_contents($root."/Bloecke/runningGame/questionNumber.json","");
     file_put_contents($root."/Bloecke/runningGame/continue.json","");
     file_put_contents($root."/Bloecke/runningGame/blocked.json","");
+    file_put_contents("../Bloecke/runningGame/nextPage.json", "");
     file_put_contents($root."/Player/Questions/currentQuestion.json","");
-    foreach (glob($root."/Quizmaster/currentBlock/*.*") as $value){
+    file_put_contents($root."/Quizmaster/currentBlock/questionsCurrent.json", "");
+    /**foreach (glob($root."/Quizmaster/currentBlock/*.*") as $value){
         unlink($value);
-    }
+    }*/
     header("Location:gameAdminView.php");
 }
 

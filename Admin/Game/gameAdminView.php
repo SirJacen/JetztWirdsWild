@@ -17,23 +17,16 @@ closeSide();
 
 function checkIfGameRunning(){
     $root = $_SERVER['DOCUMENT_ROOT'];
-    $dir = $root ."/Quizmaster/currentBlock/";
-    $fileArray = glob($dir."*.json");
+    $dir = $root ."/Quizmaster/currentBlock/questionsCurrent.json";
+    $fileArray = json_decode(file_get_contents($dir), true);
 
-
-    if(isset($fileArray['1'])){
-        echo "Zu viele Dateien im Ordner. Kann nicht feststellen welches Spiel läuft!";
-    }
-    elseif (isset($fileArray['0'])) {
-        $file = $fileArray['0'];
-        if (file_exists($file)) {
-            allInclusiveAJAX("../..", "true");
-            overwatchGame();
-            echo "<br>";
-        }
-    } else {
+    if (empty($fileArray)) {
         echo "Es läuft kein Spiel<br><br>";
         startGame();
+    } else {
+        allInclusiveAJAX("../..", "true");
+        overwatchGame();
+        echo "<br>";
     }
 }
 

@@ -7,24 +7,29 @@ define("PlayerPath", "$root" . "/Player/Questions");
 define("Root", $root);
 debugging("no");
 
+$nextPageArray = ["Player1" => "true", "Player2" => "true"];
+
 openSide("..");
 addQuicklinks("Quizmaster");
-pointsAjax("..");
+
 
 if ($_POST['aufloesen']=="true"){
     $points = logPoints();
+    pointsAndWhoWon("..", $points);
     file_put_contents("../Bloecke/runningGame/continue.json", json_encode("true"));
-    whoWon($points);
     checkQuestions();
     sendGameOptions();
 }
 elseif($_POST['senden']=="on"){
+    pointsAjax("..");
     checkQuestions();
     file_put_contents("../Bloecke/runningGame/continue.json", json_encode("false"));
+    file_put_contents("../Bloecke/runningGame/nextPage.json", json_encode($nextPageArray));
     sendQuestion(splitQuestions(), checkBlock());
     runGameOptions();
 }
 else{
+    pointsAjax("..");
     checkQuestions();
     sendGameOptions();
 }
@@ -99,7 +104,7 @@ function splitQuestions() : array
                 }
                 unset($value[0]);
                 $keepArray = array_values($value);
-                $dir = QuestionPath . "/questionsB" . checkBlock() . ".json";
+                $dir = QuestionPath . "/questionsCurrent.json";
                 file_put_contents($dir, json_encode($keepArray));
                 $questionNumber -> $block = $currentNumber;
                 file_put_contents($numberDir, json_encode($questionNumber));
@@ -110,15 +115,16 @@ function splitQuestions() : array
 }
 
 function checkBlock(): ?int{
-    $block = 1;
+    return json_decode(file_get_contents("../Bloecke/runningGame/currentGame.json"), true)[0];
+    /**$block = 1;
     while ($block<5){
-        $file = QuestionPath . "/questionsB". "$block".".json";
+        $file = QuestionPath . "/questionsCurrent.json";
         if(file_exists($file)){
             return $block;
         }
         $block++;
     }
-    return null;
+    return null;*/
 }
 
 function checkQuestions(){
@@ -128,7 +134,7 @@ function checkQuestions(){
 function showQuestions($block) // int oder null
 {
     $questionArray = [];
-    array_push($questionArray, openQuestion($block));
+    array_push($questionArray, openQuestion());
 
     foreach ($questionArray as $key => $value) {
         $newKey = $key + 1;
@@ -146,9 +152,9 @@ function showQuestions($block) // int oder null
     }
 }
 
-function openQuestion($block): array
+function openQuestion(): array
 {
-    $fileName = QuestionPath."/"."questionsB"."$block".".json";
+    $fileName = QuestionPath."/questionsCurrent.json";
     if (file_exists($fileName)) {
         return json_decode(file_get_contents($fileName), true);
     } else {
@@ -158,8 +164,8 @@ function openQuestion($block): array
 }
 
 function sendGameOptions(){
-    if (file_exists(glob("./currentBlock/questionsB*.json")['0'])) {
-        $array = json_decode(file_get_contents(glob("./currentBlock/questionsB*.json")['0']), true);
+    if (file_exists("./currentBlock/questionsCurrent.json")) {
+        $array = json_decode(file_get_contents(QuestionPath."/questionsCurrent.json"), true);
     } else {
         $array = [];
     }
@@ -179,8 +185,8 @@ function sendGameOptions(){
 }
 
 function runGameOptions(){
-    if (file_exists(glob("./currentBlock/questionsB*.json")['0'])) {
-        $array = json_decode(file_get_contents(glob("./currentBlock/questionsB*.json")['0']), true);
+    if (file_exists("./currentBlock/questionsCurrent.json")) {
+        $array = json_decode(file_get_contents(QuestionPath."/questionsCurrent.json"), true);
     } else {
         $array = [];
     }
@@ -207,7 +213,7 @@ function logPoints() : array{
  * @param $beforePoints
  * TODO
  */
-function whoWon($beforePoints){ //Verzögern, wird zu früh ausgeführt - SWITCH TO AJAX
+/**function whoWon($beforePoints){ //Verzögern, wird zu früh ausgeführt - SWITCH TO AJAX
     $currentPoints = logPoints();
     if ($beforePoints['Player1'] == $currentPoints['Player1']){
         if ($beforePoints['Player2'] == $currentPoints['Player2']){
@@ -222,4 +228,4 @@ function whoWon($beforePoints){ //Verzögern, wird zu früh ausgeführt - SWITCH
             echo "<div class='winnerPlayer'><h3>PLAYER 1 WINS</h3></div>";
         }
     }
-}
+}*/
