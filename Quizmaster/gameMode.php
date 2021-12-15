@@ -115,7 +115,8 @@ function splitQuestions() : array
 }
 
 function checkBlock(): ?int{
-    return json_decode(file_get_contents("../Bloecke/runningGame/currentGame.json"), true)[0];
+    $array = json_decode(file_get_contents("../Bloecke/runningGame/currentGame.json"), true);
+    return end($array);
     /**$block = 1;
     while ($block<5){
         $file = QuestionPath . "/questionsCurrent.json";

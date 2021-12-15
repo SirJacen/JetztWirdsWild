@@ -44,9 +44,8 @@ elseif (isset($_POST['bearbeiten'])) {
 
 if (isset($_POST['block'])) {
     $dir = $root."/Bloecke/".$_POST['block']."/";
-    $finalDir = $root."/Quizmaster/currentBlock/questionsB".$_POST['block'].".json";
+    $finalDir = $root."/Quizmaster/currentBlock/questionsCurrent.json";
     $file = glob($dir."questionsB".$_POST['block'].".json")['0'];
-    unlink(glob($root."/Quizmaster/currentBlock/*.*")['0']);
     copy ($file,$finalDir);
     $tmpArray = [];
     $tmpArray = json_decode(file_get_contents($root."/Bloecke/runningGame/currentGame.json"),true);

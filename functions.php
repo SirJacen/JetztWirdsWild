@@ -768,3 +768,15 @@ function pointsAndWhoWon($pathToRoot, array $beforePoints){
     internalPointsAJAX($pathToRoot);
     whoWonAJAX($pathToRoot, $beforePoints);
 }
+
+function getPoints($player, $root) {
+    $currentPoints = playerPoints();
+    if($player == 1) {
+        $currentPoints->Player1++;
+    }
+    elseif ($player == 2) {
+        $currentPoints->Player2++;
+    }
+    $playerDir = $root."/Player/playerPoints.json";
+    file_put_contents($playerDir, json_encode($currentPoints));
+}

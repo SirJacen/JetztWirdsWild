@@ -1,73 +1,41 @@
 <?php
-//Might delete this and switch to AJAX
 $root = $_SERVER['DOCUMENT_ROOT'];
+define("Root", $root);
 require_once "$root"."/functions.php";
 session_start();
-debugging("ja");
+debugging("no");
+
+$block = $_SESSION['block'];
+$player = $_SESSION['player'];
+$answer = $_SESSION['answer'];
 
 $_SESSION['played'] = true;
-print_r($_SESSION['answer']);
 
-if($_SESSION['guess']){
-    $twoAnswers=false;
-    $data=Array($_SESSION['player'] => $_SESSION['answer']);
-    file_put_contents("guesses.json", json_encode($data));
-    while ($twoAnswers==false){
-        $twoAnswers=checkGuesses($_SESSION['player']);
-    }
-    $array = json_decode(file_get_contents($root."/Player/guesses.json"));
-    $answerPlayer1=$array['1'];
-    $answerPlayer2=$array['2'];
-    $diff1=abs($_SESSION['rightAnswer']-$answerPlayer1);
-    $diff2=abs($_SESSION['rightAnswer']-$answerPlayer2);
-    $currentPoints = playerPoints();
-    if($diff1<$diff2){
-        $currentPoints->Player1++;
-    }elseif($diff2<$diff1){
-        $currentPoints->Player2++;
-    }elseif($diff1=$diff2){
-        $currentPoints->Player1++;
-        $currentPoints->Player2++;
-    }
-    $playerDir = $root."/Player/playerPoints.json";
-    file_put_contents($playerDir, json_encode($currentPoints));
-    $_SESSION['correct'] = true;
-}else {
-    //Gross - Kleinschreibung toleriert
-    $answer = strtolower($_POST['answer']);
-    $rightAnswer = strtolower($_POST['rightAnswer']);
+if ($block === 1){
+    $AnswerDir = $root."/Player/AnswerPlayer".$player.".json";
+    $jArray = ["Answer" => $answer];
+    file_put_contents($AnswerDir, json_encode($jArray));
+    header("Location:checkCloser.php");
+} elseif ($block === 2){
+    checkAnswer();
+    header("Location:rightOrWrong.php");
+} elseif ($block === 3){
+    checkAnswer();
+    header("Location:rightOrWrong.php");
+} elseif ($block === 4){
+    echo "geht nicht";
+} else{
+    print_r("ERROR");
+    print_r($block);
+}
+
+function checkAnswer(){
+    $answer = strtolower($_SESSION['answer']);
+    $rightAnswer = strtolower($_SESSION['rightAnswer']);
     if ($answer == $rightAnswer) {
-        $currentPoints = playerPoints();
-        if ($_SESSION['player'] == 1) {
-            $currentPoints->Player1++;
-        } elseif ($_SESSION['player'] == 2) {
-            $currentPoints->Player2++;
-        }
-        $playerDir = $root . "/Player/playerPoints.json";
-        file_put_contents($playerDir, json_encode($currentPoints));
+        getPoints($_SESSION['player'], Root);
         $_SESSION['correct'] = true;
     } else {
         $_SESSION['correct'] = false;
-    }
-}
-
-//header("Location:playerInterface.php");
-header("Location:rightOrWrong.php");
-
-function checkGuesses($player):bool {
-    $root = $_SERVER['DOCUMENT_ROOT'];
-    $array = json_decode(file_get_contents($root."/Player/guesses.json"), true);
-    if(isset($array[partner($player)])){
-        return true;
-    }else{
-        return false;
-    }
-}
-
-function partner($player):int {
-    if($player==1){
-        return 2;
-    }else{
-        return 1;
     }
 }
