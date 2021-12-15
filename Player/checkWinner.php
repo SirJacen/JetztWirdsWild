@@ -11,12 +11,12 @@ $answer = $_SESSION['answer'];
 
 $_SESSION['played'] = true;
 
-if ($block === 1){ //Schätzfragen, manchmal falsch TODO
+if ($block === 1){ //not fixed,time difference, one loads before the other, one is therefore empty TODO
     $AnswerDir = $root."/Player/AnswerPlayer".$player.".json";
     $jArray = ["Answer" => $answer];
     file_put_contents($AnswerDir, json_encode($jArray));
     header("Location:checkCloser.php");
-} elseif ($block === 2){ // blockiert nicht automatisch TODO
+} elseif ($block === 2){ // blockiert nicht automatisch TODO on SERVER
     checkAnswer();
     header("Location:rightOrWrong.php");
 } elseif ($block === 3){ // könnte gehen
@@ -24,6 +24,7 @@ if ($block === 1){ //Schätzfragen, manchmal falsch TODO
     header("Location:rightOrWrong.php");
 } elseif ($block === 4){ // müssen wir noch machen TODO
     echo "geht nicht";
+    // check if answered
 } else{
     print_r("ERROR");
     print_r($block);

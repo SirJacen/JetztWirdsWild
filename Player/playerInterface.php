@@ -46,6 +46,9 @@ if ($_POST['check'] == "true"){
         echo "<input type='hidden' name='player' value='1'>";
 
         if ($block == 1) { // Schätzfragen
+            $AnswerDir = $root."/Player/AnswerPlayer".$player.".json"; // check if fixed
+            $jArray = [];
+            file_put_contents($AnswerDir, json_encode($jArray));
             $rightAnswer = $currentArray['Answers']['0'];
             $_SESSION['rightAnswer'] = $currentArray['Answers']['0'];
             echo "<input type='hidden' name='rightAnswer' value='$rightAnswer'>";
@@ -68,7 +71,7 @@ if ($_POST['check'] == "true"){
                       formaction='playerInterface.php' name='answer' value='$value'>$value</button>";
             }
             echo "</form> </div>";
-            selfblocker($player);
+            selfblocker();
 
         } elseif ($block == 3) { // Allgemeinfragen
             $rightAnswer = $currentArray['Answers']['0'];
@@ -112,9 +115,24 @@ if ($_POST['check'] == "true"){
 
 closeSide();
 
+/**
+ * @param mixed $player
+ * OLD
+ */
+/**
 function selfblocker(mixed $player)
 {
     $selfblockerArray = json_decode(file_get_contents("../Bloecke/runningGame/blocked.json"), true);
     $selfblockerArray["Player".$player] = "true";
+    file_put_contents("../Bloecke/runningGame/blocked.json", json_encode($selfblockerArray));
+}
+*/
+
+/**
+ * TEST
+ */
+function selfblocker()
+{
+    $selfblockerArray = ["Player1" => "true", "Player2" => "true"];
     file_put_contents("../Bloecke/runningGame/blocked.json", json_encode($selfblockerArray));
 }
