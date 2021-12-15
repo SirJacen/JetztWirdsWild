@@ -303,14 +303,16 @@ function checkImage($block, $nameQuestion, $pathToRoot){
         $name = preg_replace("/[.].+/", '', $name);
         $name = str_replace(" ","", $name);// Klaut alle Leerzeichen
         $name = str_replace("?", "", $name);
+        $name = str_replace("_", "", $name);
         $tmpArray = [$name => $value];
         array_push($namedArray, $tmpArray);
     }
     $counter = 1;
+    $nameQuestion = str_replace(" ","", $nameQuestion);
+    $nameQuestion = str_replace("?", "", $nameQuestion);
     foreach ($namedArray as $item){
         if (isset($item[$nameQuestion])){
-            print_r($item[$nameQuestion]);
-            echo "<p>Bild $nameQuestion $counter:<br><img class='questionImages' alt='$nameQuestion' src='$item[$nameQuestion]'></p>";
+            echo "<p><img class='questionImages' alt='$nameQuestion' src='$item[$nameQuestion]'></p>";
             $counter ++;
         }
     }

@@ -3,10 +3,10 @@
 $root = $_SERVER['DOCUMENT_ROOT'];
 require_once "$root"."/functions.php";
 session_start();
-debugging("no");
+debugging("ja");
 
 $_SESSION['played'] = true;
-$_SESSION['answer'] = $_POST['answer'];
+print_r($_SESSION['answer']);
 
 if($_SESSION['guess']){
     $twoAnswers=false;
@@ -56,7 +56,7 @@ header("Location:rightOrWrong.php");
 
 function checkGuesses($player):bool {
     $root = $_SERVER['DOCUMENT_ROOT'];
-    $array = json_decode(file_get_contents($root."/Player/guesses.json"));
+    $array = json_decode(file_get_contents($root."/Player/guesses.json"), true);
     if(isset($array[partner($player)])){
         return true;
     }else{

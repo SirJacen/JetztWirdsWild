@@ -41,6 +41,7 @@ if ($_POST['check'] == "true"){
           <div class='questions'><br><div id='blockedIndicator'></div>
           <p>$name</p><form><p id='formended'></p>";
         checkImage($block, $name, "..");
+        echo "<br>";
         echo "<input type='hidden' name='player' value='1'>";
 
         if ($block == 1) { // Schätzfragen
