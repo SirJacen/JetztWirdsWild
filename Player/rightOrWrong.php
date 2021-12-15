@@ -22,12 +22,13 @@ if ($_SESSION['correct'] == "true") {
     echo "<div class='questionsBlock'>
                 <h1>Du hast die Frage richtig beantwortet!</h1>
               </div><div class='questions'>
-              <br><p>$name?</p>";
+              <br><p>$name</p>";
     checkImage($block, $name, "..");
     if ($block == 1 || $block == 3 || $block == 4) {
         echo "<div class='correctAnswer'><p>Deine Antwort: $yourAnswer ist richtig!</p></div></div>";
     }
     elseif ($block == 2) {
+        $currentArray = $_SESSION['shuffledArray'];
         foreach ($currentArray['Answers'] as $key => $value) {
             if($value == $yourAnswer) {
                 echo "<button class='btn btn-success answerButtons' type='submit' formmethod='post' formaction='checkWinner.php' name='answer' value='$value'>$value</button>";
@@ -44,13 +45,14 @@ if ($_SESSION['correct'] == "true") {
 else {
     echo "<div class='questionsBlock'><h1>Du hast die Frage leider falsch beantwortet!</h1>
               </div><div class='questions'><br>
-              <p>$name?</p>";
+              <p>$name</p>";
     checkImage($block, $name, "..");
     $rightAnswer = $currentArray['Answers']['0'];
     if ($block == 1 || $block == 3 || $block == 4) {
         echo "<div class='wrongAnswer'><p>Deine Antwort: $yourAnswer ist falsch!</p></div></div>";
     }
     elseif ($block == 2) {
+        $currentArray = $_SESSION['shuffledArray'];
         foreach ($currentArray['Answers'] as $key => $value) {
             if($value == $rightAnswer) {
                 echo "<button class='btn btn-success answerButtons' type='submit' formmethod='post' formaction='checkWinner.php' name='answer' value='$value'>$value</button>";
@@ -63,7 +65,5 @@ else {
         echo "</div>";
     }
 }
-
-file_put_contents($root."/Player/Questions/currentQuestion.json","");
 
 closeSide();

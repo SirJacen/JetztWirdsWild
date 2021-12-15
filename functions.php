@@ -762,9 +762,9 @@ function whoWonAJAX($pathToRoot, $beforePoints){
     ';
 }
 
-function pointsAndWhoWon($pathToRoot, array $beforePoints){
+function pointsAndWhoWon($pathToRoot, array $beforePoints){ //Verlängert wegen Latenz
     echo '<body onload="pointsAJAX(); setInterval(function(){pointsAJAX()}, 5000); 
-          setTimeout(function(){whoWon()}, 5000);">';
+          setTimeout(function(){whoWon()}, 10000);">';
     internalPointsAJAX($pathToRoot);
     whoWonAJAX($pathToRoot, $beforePoints);
 }
@@ -779,4 +779,9 @@ function getPoints($player, $root) {
     }
     $playerDir = $root."/Player/playerPoints.json";
     file_put_contents($playerDir, json_encode($currentPoints));
+}
+
+function checkBlock(): ?int{
+    $array = json_decode(file_get_contents("../Bloecke/runningGame/currentGame.json"), true);
+    return end($array);
 }

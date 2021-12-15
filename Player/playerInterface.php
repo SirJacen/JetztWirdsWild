@@ -57,7 +57,6 @@ if ($_POST['check'] == "true"){
 
         } elseif ($block == 2) { //Buzzerfragen
             //blockfunktion
-            selfblocker($player);
             $rightAnswer = $currentArray['Answers']['0'];
             $_SESSION['rightAnswer'] = $currentArray['Answers']['0'];
             echo "<input type='hidden' name='rightAnswer' value='$rightAnswer'>";
@@ -65,9 +64,11 @@ if ($_POST['check'] == "true"){
             $_SESSION['shuffledArray'] = $currentArray['Answers'];
             echo "<input type='hidden' name='check' value='true'>";
             foreach ($currentArray['Answers'] as $key => $value) {
-                echo "<button id='answerButton' class='btn btn-dark answerButtons' type='submit' formmethod='post' formaction='playerInterface.php' name='answer' value='$value'>$value</button>";
+                echo "<button id='answerButton' class='btn btn-dark answerButtons' type='submit' formmethod='post' 
+                      formaction='playerInterface.php' name='answer' value='$value'>$value</button>";
             }
             echo "</form> </div>";
+            selfblocker($player);
 
         } elseif ($block == 3) { // Allgemeinfragen
             $rightAnswer = $currentArray['Answers']['0'];

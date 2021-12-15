@@ -114,20 +114,6 @@ function splitQuestions() : array
     return $sendArray;
 }
 
-function checkBlock(): ?int{
-    $array = json_decode(file_get_contents("../Bloecke/runningGame/currentGame.json"), true);
-    return end($array);
-    /**$block = 1;
-    while ($block<5){
-        $file = QuestionPath . "/questionsCurrent.json";
-        if(file_exists($file)){
-            return $block;
-        }
-        $block++;
-    }
-    return null;*/
-}
-
 function checkQuestions(){
     showQuestions(checkBlock());
 }
@@ -209,24 +195,3 @@ function runGameOptions(){
 function logPoints() : array{
    return json_decode(file_get_contents("../Player/playerPoints.json"), true);
 }
-
-/**
- * @param $beforePoints
- * TODO
- */
-/**function whoWon($beforePoints){ //Verzögern, wird zu früh ausgeführt - SWITCH TO AJAX
-    $currentPoints = logPoints();
-    if ($beforePoints['Player1'] == $currentPoints['Player1']){
-        if ($beforePoints['Player2'] == $currentPoints['Player2']){
-            echo "<div class='winnerNone'><h3>KEINER GEWINNT</h3></div>";
-        } else {
-            echo "<div class='winnerPlayer'><h3>PLAYER 2 WINS</h3></div>";
-        }
-    } else {
-        if ($beforePoints['Player2'] !== $currentPoints['Player2']){
-            echo "<div class='winnerBoth'><h3>BEIDE GEWINNEN</h3></div>";
-        } else {
-            echo "<div class='winnerPlayer'><h3>PLAYER 1 WINS</h3></div>";
-        }
-    }
-}*/

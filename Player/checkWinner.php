@@ -11,18 +11,18 @@ $answer = $_SESSION['answer'];
 
 $_SESSION['played'] = true;
 
-if ($block === 1){
+if ($block === 1){ //Schätzfragen, manchmal falsch TODO
     $AnswerDir = $root."/Player/AnswerPlayer".$player.".json";
     $jArray = ["Answer" => $answer];
     file_put_contents($AnswerDir, json_encode($jArray));
     header("Location:checkCloser.php");
-} elseif ($block === 2){
+} elseif ($block === 2){ // blockiert nicht automatisch TODO
     checkAnswer();
     header("Location:rightOrWrong.php");
-} elseif ($block === 3){
+} elseif ($block === 3){ // könnte gehen
     checkAnswer();
     header("Location:rightOrWrong.php");
-} elseif ($block === 4){
+} elseif ($block === 4){ // müssen wir noch machen TODO
     echo "geht nicht";
 } else{
     print_r("ERROR");
