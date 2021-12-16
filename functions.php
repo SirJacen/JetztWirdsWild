@@ -410,6 +410,7 @@ function internalPointsAJAX($pathToRoot){
         <div class ="pointContainer">
         <div class ="points" id="player1">Spieler 1: 0 Punkte</div>
         <div class ="points" id="player2">Spieler 1: 0 Punkte</div>
+        <br><br>
         </div>
         <script>
             function pointsAJAX () {
@@ -625,12 +626,20 @@ function internalIfBlocked($pathToRoot, $playerID)
                     let blocked = JSON.parse(this.responseText);
                     console.log(blocked);
                     if (blocked["Player'.$playerID.'"] === "true"){
-                        document.getElementById("answerButton").setAttribute("type", "reset");
-                        document.getElementById("answerButton").className = "btn btn-secondary";
+                        let list = document.getElementsByClassName("btn");
+                        for (index = 0; index < list.length; ++index) {
+                            list[index].setAttribute("type", "reset");
+                            list[index].classList.remove("btn-dark");
+                            list[index].classList.add("btn-secondary");
+                        }
                         document.getElementById("blockedIndicator").innerHTML = "<h3>BLOCKED</h3>";
                     } else {
-                        document.getElementById("answerButton").setAttribute("type", "submit");
-                        document.getElementById("answerButton").className = "btn btn-dark";
+                        let list = document.getElementsByClassName("btn");
+                        for (index = 0; index < list.length; ++index) {
+                            list[index].setAttribute("type", "submit");
+                            list[index].classList.add("btn-dark");
+                            list[index].classList.remove("btn-secondary");
+                        }
                         document.getElementById("blockedIndicator").innerHTML = "";
                     }
                 }
@@ -815,7 +824,7 @@ function internalReadChat($pathToRoot){
                     let msgArray = JSON.parse(this.responseText);
                     console.log(msgArray);
                     controlArray.forEach(function removSent(item, msgArray){  
-                        msgArray.splice(item, 1); // somehow splice is not a function?
+                        delete msgArray[item];
                     })
                     console.log(msgArray);
                     msgArray.forEach(function listingChat(element, index){
@@ -845,4 +854,76 @@ function pointsChat($pathToRoot){
     echo '<body onload="pointsAJAX(); readChat(); setInterval(function(){pointsAJAX()}, 5000); 
           setInterval(function(){readChat()}, 1000);">';
     internalPointsAJAX($pathToRoot);
+}
+
+function checkCloserAjax($pathToRoot, $player, $otherPlayer, $rightAnswer)
+{
+    echo '
+        <body onload="setTimeout(function(){checkClose()}, 1000)">
+        <script>
+        function checkClose()
+        {
+            let checkhttp = new XMLHttpRequest();
+            checkhttp.onreadystatechange = function()
+            {
+                if (this.readyState === 4 && this.status === 200)
+                {
+                    let response = JSON.parse(this.responseText);
+                    let myAnswer = response["Answer"];
+                    checkOther("'.$otherPlayer.'", myAnswer)
+                }
+            }
+            checkhttp.open("GET", "'.$pathToRoot.'/Player/AnswerPlayer'.$player.'.json", true);
+            checkhttp.send();
+        }
+        
+        function checkOther(otherPlayer, myAnswer)
+        {
+            let otherhttp = new XMLHttpRequest();
+            otherhttp.onreadystatechange = function()
+            {
+                if (this.readyState === 4 && this.status === 200)
+                {
+                    let rightAnswer = "'.$rightAnswer.'";
+                    let otherResponse = JSON.parse(this.responseText);
+                    let otherAnswer = otherResponse["Answer"];
+                    let otherDiff;
+                    let myDiff;
+                    if (myAnswer >= rightAnswer)
+                    {
+                        myDiff = myAnswer - rightAnswer;
+                    } 
+                    else
+                    {
+                        myDiff = rightAnswer - myAnswer;
+                    }
+                    
+                    if (otherAnswer >= rightAnswer)
+                    {
+                        otherDiff = otherAnswer - rightAnswer;
+                    } 
+                    else
+                    {
+                        otherDiff = rightAnswer - otherAnswer;
+                    }
+                    
+                    if (myDiff > otherDiff) {
+                        window.location.href="pointsGiver.php?result=lost"
+                    } else if (otherDiff > myDiff) {
+                        window.location.href="pointsGiver.php?result=won"
+                    } else if (otherDiff === myDiff) {
+                        window.location.href="pointsGiver.php?result=won"
+                    } else {
+                        window.location.href="pointsGiver.php?result=ERROR"
+                    }
+                  
+                }
+            }
+            otherhttp.open("GET", "'.$pathToRoot.'/Player/AnswerPlayer"+otherPlayer+".json", true);
+            otherhttp.send();
+        }
+        </script>
+    ';
+
+
 }

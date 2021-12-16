@@ -11,7 +11,7 @@ $answer = $_SESSION['answer'];
 
 $_SESSION['played'] = true;
 
-if ($block === 1){ //not fixed,time difference, one loads before the other, one is therefore empty TODO
+if ($block === 1){ //fixed
     $AnswerDir = $root."/Player/AnswerPlayer".$player.".json";
     $jArray = ["Answer" => $answer];
     file_put_contents($AnswerDir, json_encode($jArray));

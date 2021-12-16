@@ -4,23 +4,26 @@ require_once "$root"."/functions.php";
 session_start();
 define("CurrentQuestionPath", "$root" . "/Player/Questions");
 define("Root", $root);
-debugging("ja");
+debugging("no");
 
 openSide("..");
 
 //Debugging
+/**
 $array =json_decode(file_get_contents("AnswerPlayer1.json"), true);
 $array2 =json_decode(file_get_contents("AnswerPlayer2.json"), true);
 echo "1: ";
 print_r($array);
 echo "2: ";
 print_r($array2);
+ */
 //--------------------------------------------
 
 $jsonPath = CurrentQuestionPath."/currentQuestion.json";
 $currentArray = openFile($jsonPath);
 
 nextPagePointsAJAX("..", $_SESSION['player']);
+echo "<br><br>";
 $yourAnswer = $_SESSION['answer'];
 
 $name = $currentArray['Question'];

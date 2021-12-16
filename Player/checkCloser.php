@@ -17,6 +17,10 @@ if ($player == 1) {
     echo "error";
 }
 
+checkCloserAjax("..", $player, $otherPlayer, $rightAnswer);
+
+
+/**
 $myAnswerData = $root . "/Player/AnswerPlayer" . $player . ".json";
 $otherAnswerData = $root . "/Player/AnswerPlayer" . $otherPlayer . ".json";
 
@@ -69,3 +73,4 @@ function checkDiff($d, $rightA): float
         return $rightA - $d;
     }
 }
+ */
