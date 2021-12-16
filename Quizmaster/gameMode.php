@@ -12,16 +12,19 @@ $nextPageArray = ["Player1" => "true", "Player2" => "true"];
 openSide("..");
 addQuicklinks("Quizmaster");
 
-
 if ($_POST['aufloesen']=="true"){
     $points = logPoints();
-    pointsAndWhoWon("..", $points);
+    pointsWhoWonChat("..", $points);
+    readChat();
+    echo "<div class='chatPos'>";
     file_put_contents("../Bloecke/runningGame/continue.json", json_encode("true"));
     checkQuestions();
     sendGameOptions();
 }
 elseif($_POST['senden']=="on"){
-    pointsAjax("..");
+    pointsChat("..");
+    readChat();
+    echo "<div class='chatPos'>";
     checkQuestions();
     file_put_contents("../Bloecke/runningGame/continue.json", json_encode("false"));
     file_put_contents("../Bloecke/runningGame/nextPage.json", json_encode($nextPageArray));
@@ -29,10 +32,13 @@ elseif($_POST['senden']=="on"){
     runGameOptions();
 }
 else{
-    pointsAjax("..");
+    pointsChat("..");
+    readChat();
+    echo "<div class='chatPos'>";
     checkQuestions();
     sendGameOptions();
 }
+echo "</div></div>";
 closeSide();
 
 //-------------------------------------------------
@@ -125,7 +131,7 @@ function showQuestions($block) // int oder null
 
     foreach ($questionArray as $key => $value) {
         $newKey = $key + 1;
-        echo "<br><div class='questionsBlock'>Block $block:</div><div class='questions'>";
+        echo "<br><div class='questionsBlock wide'><h1>Block $block:</h1></div><div class='questions wide'><div class='scrollQ'>";
         foreach ($value as $questionKey => $item) {
             if ($questionKey == 0) {
                 echo "<div class='currentQuestion'>";
@@ -194,4 +200,10 @@ function runGameOptions(){
 
 function logPoints() : array{
    return json_decode(file_get_contents("../Player/playerPoints.json"), true);
+}
+
+function readChat(){
+    echo "<div class='chatPos'><div class='questionsBlock wide'><h1>Chat</h1></div>";
+    internalReadChat("..");
+    echo "</div>";
 }

@@ -97,10 +97,7 @@ if ($_POST['check'] == "true"){
             echo "<p class='hiddenText'></p><br><p class='hiddenText'></p><br>
               <p class='hiddenText'></p><br><p class='hiddenText'></p><br>
               <p class='hiddenText'></p><br>";
-            echo "<textarea name='answer' placeholder='Hier die Antwort eingeben' required></textarea> 
-              <br> 
-              <button id='answerButton' class='btn btn-dark' type='submit' formmethod='post' formaction='playerInterface.php' name='check' value='true'>Bestätigen</button>
-              </form></div>";
+            echo "</div>";
         }
     } // Wait for Questions
     elseif ($running == true) {

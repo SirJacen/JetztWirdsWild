@@ -2,7 +2,7 @@
 
 use JetBrains\PhpStorm\ArrayShape;
 
-function openSide($wayToRoot = "."){
+function openSide($wayToRoot = ".", $noBanner = false){
     echo "<!DOCTYPE html>
           <html lang = 'de'>
           <head>
@@ -13,7 +13,10 @@ function openSide($wayToRoot = "."){
            </head>
            <body>    
     ";
-    addBanner($wayToRoot);
+    if ($noBanner === false){
+        addBanner($wayToRoot);
+    }
+
 }
 
 function closeSide(){
@@ -332,6 +335,7 @@ function addQuicklinks($user, $pathIndicator = ".") {
         echo "<div class='link'><a class='btn btn-dark' href='$pathIndicator\Questions\questions.php'>Questions</a></div>";
         echo "<div class='link'><a class='btn btn-dark' href='$pathIndicator\Game\gameAdminView.php'>Game</a></div>";
         echo "<div class='link'><a class='btn btn-dark' href='$pathIndicator\override.php'>Override</a></div>";
+        echo "<div class='link'><a class='btn btn-dark' href='$pathIndicator\Chat\chat.php'>Chat</a></div>";
         echo "<div class='link'><a class='btn btn-dark' href='$pathIndicator\..\index.php'>Log Out</a></div>";
     } elseif ($user == "Quizmaster"){
         echo "<div class='link'><a class='btn btn-dark' href='$pathIndicator\gameMode.php'>Gamemode</a></div>";
@@ -406,7 +410,7 @@ function internalPointsAJAX($pathToRoot){
         <div class ="pointContainer">
         <div class ="points" id="player1">Spieler 1: 0 Punkte</div>
         <div class ="points" id="player2">Spieler 1: 0 Punkte</div>
-        </div><br><br>
+        </div>
         <script>
             function pointsAJAX () {
                 let xhttp = new XMLHttpRequest();
@@ -762,12 +766,17 @@ function whoWonAJAX($pathToRoot, $beforePoints){
     ';
 }
 
-function pointsAndWhoWon($pathToRoot, array $beforePoints){ //Verlängert wegen Latenz
+/**
+ * @param $pathToRoot
+ * @param array $beforePoints
+ * UNUSED
+ */
+/**function pointsAndWhoWon($pathToRoot, array $beforePoints){
     echo '<body onload="pointsAJAX(); setInterval(function(){pointsAJAX()}, 5000); 
           setTimeout(function(){whoWon()}, 10000);">';
     internalPointsAJAX($pathToRoot);
     whoWonAJAX($pathToRoot, $beforePoints);
-}
+}*/
 
 function getPoints($player, $root) {
     $currentPoints = playerPoints();
@@ -781,7 +790,59 @@ function getPoints($player, $root) {
     file_put_contents($playerDir, json_encode($currentPoints));
 }
 
-function checkBlock(): ?int{
+function checkBlock(): ?int
+{
     $array = json_decode(file_get_contents("../Bloecke/runningGame/currentGame.json"), true);
     return end($array);
+}
+
+function readChatAJAX($pathToRoot)
+{
+    echo '<body onload="readChat(); setInterval(function(){readChat()}, 1000);">';
+    internalReadChat($pathToRoot);
+}
+
+function internalReadChat($pathToRoot){
+    echo '
+        <div id="msgBox" class="msgBox"></div>
+        <script>
+        let controlArray = [];
+        console.log(controlArray);
+        function readChat(){
+            let chathttp = new XMLHttpRequest();
+            chathttp.onreadystatechange = function(){
+                if (this.readyState === 4 && this.status === 200){
+                    let msgArray = JSON.parse(this.responseText);
+                    console.log(msgArray);
+                    controlArray.forEach(function removSent(item, msgArray){  
+                        msgArray.splice(item, 1); // somehow splice is not a function?
+                    })
+                    console.log(msgArray);
+                    msgArray.forEach(function listingChat(element, index){
+                        document.getElementById("msgBox").innerHTML += "<p class=chatMsg>"+ element[0] + "</p><br>";
+                        controlArray.push(index);
+                        let leChat = document.getElementById("msgBox");
+                        leChat.scrollTop = leChat.scrollHeight;
+                    })
+                }
+            }
+            chathttp.open("GET","' . $pathToRoot . '/Admin/Chat/chatLog.json", true);
+            chathttp.send();
+        }
+        </script>
+    
+    ';
+}
+
+function pointsWhoWonChat($pathToRoot, array $beforePoints){
+    echo '<body onload="pointsAJAX(); readChat(); setInterval(function(){pointsAJAX()}, 5000); 
+          setInterval(function(){readChat()}, 1000); setTimeout(function(){whoWon()}, 5000);">';
+    internalPointsAJAX($pathToRoot);
+    whoWonAJAX($pathToRoot, $beforePoints);
+}
+
+function pointsChat($pathToRoot){
+    echo '<body onload="pointsAJAX(); readChat(); setInterval(function(){pointsAJAX()}, 5000); 
+          setInterval(function(){readChat()}, 1000);">';
+    internalPointsAJAX($pathToRoot);
 }

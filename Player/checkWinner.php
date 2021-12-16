@@ -24,7 +24,7 @@ if ($block === 1){ //not fixed,time difference, one loads before the other, one 
     header("Location:rightOrWrong.php");
 } elseif ($block === 4){ // müssen wir noch machen TODO
     echo "geht nicht";
-    // check if answered
+    // Leiter bekommt aufdecken button
 } else{
     print_r("ERROR");
     print_r($block);

@@ -32,6 +32,9 @@ $blockDir = $root."/Bloecke/runningGame/blocked.json";
 file_put_contents($blockDir, json_encode($blocked));
 
 $nextPageArray = ["Player1" => "false", "Player2" => "false"];
-file_put_contents("../Bloecke/runningGame/nextPage.json", json_encode($nextPageArray));
+file_put_contents($root."/Bloecke/runningGame/nextPage.json", json_encode($nextPageArray));
+
+$emptyArray = [];
+file_put_contents($root."/Admin/Chat/chatLog.json", json_encode($emptyArray));
 
 header("Location: gameAdminView.php");

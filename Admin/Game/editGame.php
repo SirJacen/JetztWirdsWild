@@ -28,9 +28,7 @@ elseif (isset($_POST['delete'])) {
     file_put_contents("../Bloecke/runningGame/nextPage.json", "");
     file_put_contents($root."/Player/Questions/currentQuestion.json","");
     file_put_contents($root."/Quizmaster/currentBlock/questionsCurrent.json", "");
-    /**foreach (glob($root."/Quizmaster/currentBlock/*.*") as $value){
-        unlink($value);
-    }*/
+    file_put_contents($root."/Admin/Chat/chatLog.json", "");
     header("Location:gameAdminView.php");
 }
 
