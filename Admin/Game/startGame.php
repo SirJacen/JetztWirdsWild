@@ -36,5 +36,6 @@ file_put_contents($root."/Bloecke/runningGame/nextPage.json", json_encode($nextP
 
 $emptyArray = [];
 file_put_contents($root."/Admin/Chat/chatLog.json", json_encode($emptyArray));
+file_put_contents($root."/Player/block4Handler.json", json_encode($emptyArray));
 
 header("Location: gameAdminView.php");

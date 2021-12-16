@@ -31,10 +31,10 @@ if ($_POST['check'] == "true"){
 
 //Show Questions
     if (!$arrayIsEmpty) {
-        blockedNextPagePoints("..", $player);
         $currentArray = openFile($jsonPath);
         $name = $currentArray['Question'];
         $block = $currentArray['Block'];
+        blockedNextPagePoints("..", $player, $block);
         $currentNumber = $currentArray['Number'];
         $_SESSION['block'] = $block;
         echo "<div class='questionsBlock'><h1>Block $block: Frage $currentNumber</h1>
@@ -83,6 +83,8 @@ if ($_POST['check'] == "true"){
               </form></div>";
 
         } elseif ($block == 4) { // Aufzählfragen -- still needs work
+            block4Ajax(".."); // weiterleiten zu neuen Seite?
+            /**
             $rightAnswer = $currentArray['Answers'];
             $_SESSION['rightAnswer'] = $currentArray['Answers'];
             foreach ($_SESSION['rightAnswer'] as $key => $value) {
@@ -97,6 +99,7 @@ if ($_POST['check'] == "true"){
             echo "<p class='hiddenText'></p><br><p class='hiddenText'></p><br>
               <p class='hiddenText'></p><br><p class='hiddenText'></p><br>
               <p class='hiddenText'></p><br>";
+             */
             echo "</div>";
         }
     } // Wait for Questions

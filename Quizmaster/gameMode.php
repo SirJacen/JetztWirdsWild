@@ -18,14 +18,14 @@ if ($_POST['aufloesen']=="true"){
     readChat();
     echo "<div class='chatPos'>";
     file_put_contents("../Bloecke/runningGame/continue.json", json_encode("true"));
-    checkQuestions();
+    showQuestions(checkBlock());
     sendGameOptions();
 }
 elseif($_POST['senden']=="on"){
     pointsChat("..");
     readChat();
     echo "<div class='chatPos'>";
-    checkQuestions();
+    showQuestions(checkBlock());
     file_put_contents("../Bloecke/runningGame/continue.json", json_encode("false"));
     file_put_contents("../Bloecke/runningGame/nextPage.json", json_encode($nextPageArray));
     sendQuestion(splitQuestions(), checkBlock());
@@ -35,7 +35,7 @@ else{
     pointsChat("..");
     readChat();
     echo "<div class='chatPos'>";
-    checkQuestions();
+    showQuestions(checkBlock());
     sendGameOptions();
 }
 echo "</div></div>";
@@ -90,7 +90,7 @@ function splitQuestions() : array
                             $sendArray = array(
                                 "questionName" => $item['questionName'],
                                 //am häufigsten
-                                "questionMostOften" =>  $item['mostOftenAnswer'],
+                                "questionMostOften" =>  $item['mostOftenAnswer'], //send to block4Handler: How often, Percentage, Name, true on buttonclick probably from Admin site
                                 "questionMostOftenPer" => $item['mostOftenAnswerPercentage'],
                                 //am 2. häufigsten
                                 "questionOften" => $item['oftenAnswer'],
@@ -118,10 +118,6 @@ function splitQuestions() : array
         }
     }
     return $sendArray;
-}
-
-function checkQuestions(){
-    showQuestions(checkBlock());
 }
 
 function showQuestions($block) // int oder null

@@ -29,6 +29,7 @@ elseif (isset($_POST['delete'])) {
     file_put_contents($root."/Player/Questions/currentQuestion.json","");
     file_put_contents($root."/Quizmaster/currentBlock/questionsCurrent.json", "");
     file_put_contents($root."/Admin/Chat/chatLog.json", "");
+    file_put_contents($root."/Player/block4Handler.json", "");
     header("Location:gameAdminView.php");
 }
 

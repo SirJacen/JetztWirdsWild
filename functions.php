@@ -336,6 +336,7 @@ function addQuicklinks($user, $pathIndicator = ".") {
         echo "<div class='link'><a class='btn btn-dark' href='$pathIndicator\Game\gameAdminView.php'>Game</a></div>";
         echo "<div class='link'><a class='btn btn-dark' href='$pathIndicator\override.php'>Override</a></div>";
         echo "<div class='link'><a class='btn btn-dark' href='$pathIndicator\Chat\chat.php'>Chat</a></div>";
+        echo "<div class='link'><a class='btn btn-dark' href='$pathIndicator\block4Transmitter.php'>Block 4</a></div>";
         echo "<div class='link'><a class='btn btn-dark' href='$pathIndicator\..\index.php'>Log Out</a></div>";
     } elseif ($user == "Quizmaster"){
         echo "<div class='link'><a class='btn btn-dark' href='$pathIndicator\gameMode.php'>Gamemode</a></div>";
@@ -709,14 +710,25 @@ function adminBlockingAJAX($pathToRoot){
     ';
 }
 
-function blockedNextPagePoints($pathToRoot, $playerID){
-    echo '<body onload="blockedAJAX; pointsAJAX(); nextAJAX();
+function blockedNextPagePoints($pathToRoot, $playerID, $block){
+    if ($block == 4) {
+        echo '<body onload="blockedAJAX; pointsAJAX(); nextAJAX(); block4Ajax();
+          setInterval(function (){blockedAJAX()}, 1000); 
+          setInterval(function(){pointsAJAX()}, 5000); 
+          setInterval(function(){nextAJAX()}, 1000);
+          setInterval(function (){block4Ajax()}, 1000); ">';
+        internalPointsAJAX($pathToRoot);
+        internalIfBlocked($pathToRoot, $playerID);
+        internalNextPageAJAX($pathToRoot, $playerID);
+    } else {
+        echo '<body onload="blockedAJAX; pointsAJAX(); nextAJAX();
           setInterval(function (){blockedAJAX()}, 1000); 
           setInterval(function(){pointsAJAX()}, 5000); 
           setInterval(function(){nextAJAX()}, 1000);">';
-    internalPointsAJAX($pathToRoot);
-    internalIfBlocked($pathToRoot, $playerID);
-    internalNextPageAJAX($pathToRoot, $playerID);
+        internalPointsAJAX($pathToRoot);
+        internalIfBlocked($pathToRoot, $playerID);
+        internalNextPageAJAX($pathToRoot, $playerID);
+    }
 }
 
 function waitPointsNextPage($pathToRoot, $playerID){
@@ -924,6 +936,67 @@ function checkCloserAjax($pathToRoot, $player, $otherPlayer, $rightAnswer)
         }
         </script>
     ';
+}
 
-
+function block4Ajax($pathToRoot){
+    echo '
+        <p id = "most" class="hiddenText"></p><br>
+        <p id = "often" class="hiddenText"></p><br>
+        <p id = "middle" class="hiddenText"></p><br>
+        <p id = "less" class="hiddenText"></p><br>
+        <p id = "least" class="hiddenText"></p>
+        <script>
+        function block4Ajax()
+        {
+            let fourhttp = new XMLHttpRequest();
+            fourhttp.onreadystatechange = function()
+            {
+                if (this.readyState === 4 && this.status === 200)
+                {
+                    let answers = JSON.parse(this.responseText);
+                    console.log(answers);
+                    answers.forEach(function writeTo(item){
+                        if (item["Pos"] === "Most" && item["reveal"] === "true")
+                        {
+                            let name = item["Name"];
+                            let percentage = item["Percentage"]
+                            document.getElementById("most").className = "visbleText";
+                            document.getElementById("most").innerHTML = name + " mit " + percentage +"% - 5 Punkte";
+                        } 
+                        else if (item["Pos"] === "Often" && item["reveal"] === "true")
+                        {
+                            let name = item["Name"];
+                            let percentage = item["Percentage"]
+                            document.getElementById("often").className = "visbleText";
+                            document.getElementById("often").innerHTML = name + " mit " + percentage +"% - 4 Punkte";
+                        }
+                        else if (item["Pos"] === "Middle" && item["reveal"] === "true")
+                        {
+                            let name = item["Name"];
+                            let percentage = item["Percentage"]
+                            document.getElementById("middle").className = "visbleText";
+                            document.getElementById("middle").innerHTML = name + " mit " + percentage +"% - 3 Punkte";
+                        }
+                        else if (item["Pos"] === "Less" && item["reveal"] === "true")
+                        {
+                            let name = item["Name"];
+                            let percentage = item["Percentage"]
+                            document.getElementById("less").className = "visbleText";
+                            document.getElementById("less").innerHTML = name + " mit " + percentage +"% - 2 Punkte";
+                        }
+                        else if (item["Pos"] === "Least" && item["reveal"] === "true")
+                        {
+                            let name = item["Name"];
+                            let percentage = item["Percentage"]
+                            document.getElementById("least").className = "visbleText";
+                            document.getElementById("least").innerHTML = name + " mit " + percentage +"% - 1 Punkte";
+                        }
+                    })
+                }
+            }
+            fourhttp.open("GET", "'.$pathToRoot.'/Player/block4Handler.json",true)
+            fourhttp.send();
+        }
+        </script>
+    ';
 }
