@@ -24,7 +24,7 @@ if ($block === 1){ //fixed
     header("Location:rightOrWrong.php");
 } elseif ($block === 4){ // müssen wir noch machen TODO
     echo "geht nicht";
-    // Leiter bekommt aufdecken button
+    // Admin bekommt aufdecken button
 } else{
     print_r("ERROR");
     print_r($block);
