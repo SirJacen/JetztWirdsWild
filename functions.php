@@ -835,9 +835,10 @@ function internalReadChat($pathToRoot){
                 if (this.readyState === 4 && this.status === 200){
                     let msgArray = JSON.parse(this.responseText);
                     console.log(msgArray);
-                    controlArray.forEach(function removSent(item, msgArray){  
-                        delete msgArray[item];
-                    })
+                    for (index = 0; index < controlArray.length; index ++){
+                        let newIndex = controlArray[index];
+                        delete msgArray[newIndex];
+                    }
                     console.log(msgArray);
                     msgArray.forEach(function listingChat(element, index){
                         document.getElementById("msgBox").innerHTML += "<p class=chatMsg>"+ element[0] + "</p><br>";
@@ -956,35 +957,35 @@ function block4Ajax($pathToRoot){
                     let answers = JSON.parse(this.responseText);
                     console.log(answers);
                     answers.forEach(function writeTo(item){
-                        if (item["Pos"] === "Most" && item["reveal"] === "true")
+                        if (item["Pos"] === "Most" && item["reveal"] === true)
                         {
                             let name = item["Name"];
                             let percentage = item["Percentage"]
                             document.getElementById("most").className = "visbleText";
                             document.getElementById("most").innerHTML = name + " mit " + percentage +"% - 5 Punkte";
                         } 
-                        else if (item["Pos"] === "Often" && item["reveal"] === "true")
+                        else if (item["Pos"] === "Often" && item["reveal"] === true)
                         {
                             let name = item["Name"];
                             let percentage = item["Percentage"]
                             document.getElementById("often").className = "visbleText";
                             document.getElementById("often").innerHTML = name + " mit " + percentage +"% - 4 Punkte";
                         }
-                        else if (item["Pos"] === "Middle" && item["reveal"] === "true")
+                        else if (item["Pos"] === "Middle" && item["reveal"] === true)
                         {
                             let name = item["Name"];
                             let percentage = item["Percentage"]
                             document.getElementById("middle").className = "visbleText";
                             document.getElementById("middle").innerHTML = name + " mit " + percentage +"% - 3 Punkte";
                         }
-                        else if (item["Pos"] === "Less" && item["reveal"] === "true")
+                        else if (item["Pos"] === "Less" && item["reveal"] === true)
                         {
                             let name = item["Name"];
                             let percentage = item["Percentage"]
                             document.getElementById("less").className = "visbleText";
                             document.getElementById("less").innerHTML = name + " mit " + percentage +"% - 2 Punkte";
                         }
-                        else if (item["Pos"] === "Least" && item["reveal"] === "true")
+                        else if (item["Pos"] === "Least" && item["reveal"] === true)
                         {
                             let name = item["Name"];
                             let percentage = item["Percentage"]

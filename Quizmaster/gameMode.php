@@ -23,6 +23,7 @@ if ($_POST['aufloesen']=="true"){
 }
 elseif($_POST['senden']=="on"){
     pointsChat("..");
+    emptyBlock4Handler();
     readChat();
     echo "<div class='chatPos'>";
     showQuestions(checkBlock());
@@ -202,4 +203,9 @@ function readChat(){
     echo "<div class='chatPos'><div class='questionsBlock wide'><h1>Chat</h1></div>";
     internalReadChat("..");
     echo "</div>";
+}
+
+function emptyBlock4Handler(){
+    $emptyArray = [];
+    file_put_contents("../Player/block4Handler.json", json_encode($emptyArray));
 }

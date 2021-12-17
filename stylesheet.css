@@ -158,7 +158,7 @@ input[type='number']{
 
 .visibleText {
     width: 50%;
-    height: 30px;
+    height: auto;
     margin: auto;
     border-style: solid;
     border-radius: 4px;
