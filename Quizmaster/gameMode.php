@@ -9,7 +9,7 @@ debugging("no");
 
 $nextPageArray = ["Player1" => "true", "Player2" => "true"];
 
-openSide("..");
+openSide("..", true);
 addQuicklinks("Quizmaster");
 
 if ($_POST['aufloesen']=="true"){

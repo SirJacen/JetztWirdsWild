@@ -341,6 +341,10 @@ function addQuicklinks($user, $pathIndicator = ".") {
     } elseif ($user == "Quizmaster"){
         echo "<div class='link'><a class='btn btn-dark' href='$pathIndicator\gameMode.php'>Gamemode</a></div>";
         echo "<div class='link'><a class='btn btn-dark' href='$pathIndicator\..\index.php'>Log Out</a></div>";
+    } elseif ($user == "Points"){
+        echo "<div class='link'><a class='btn btn-dark' href='$pathIndicator\points.php'>Punkte und Chat</a></div>";
+        echo "<div class='link'><a class='btn btn-dark' href='$pathIndicator\givenFile.php'>Answers</a></div>";
+        echo "<div class='link'><a class='btn btn-dark' href='$pathIndicator\..\index.php'>Log Out</a></div>";
     }
     echo "</div></section><br>";
 }
@@ -515,18 +519,24 @@ function internalShowCurrentBlockAndQuestion($pathToRoot){
     ';
 }
 
-function allInclusiveAJAX($pathToRoot, $blocked = false){
+function allInclusiveAJAX($pathToRoot, $blocked = false, $chat = false){
     if ($blocked == "true"){
         echo '<body onload="infoAJAX(); pointsAJAX(); blockingAJAX(); setInterval(function(){infoAJAX()}, 5000); 
               setInterval(function(){pointsAJAX()}, 5000); setInterval(function(){blockingAJAX()}, 1000);">';
         internalPointsAJAX($pathToRoot);
         internalShowCurrentBlockAndQuestion($pathToRoot);
         adminBlockingAJAX($pathToRoot);
-    }else {
+    }elseif ($chat == "true") {
+        echo '<body onload="infoAJAX(); pointsAJAX(); readChat(); setInterval(function(){infoAJAX()}, 5000); 
+              setInterval(function(){pointsAJAX()}, 5000); setInterval(function(){readChat()}, 1000);">';
+        internalPointsAJAX($pathToRoot);
+        internalShowCurrentBlockAndQuestion($pathToRoot);
+        internalReadChat($pathToRoot);
+    } else {
         echo '<body onload="infoAJAX(); pointsAJAX(); setInterval(function(){infoAJAX()}, 5000); 
               setInterval(function(){pointsAJAX()}, 5000);">';
-              internalPointsAJAX($pathToRoot);
-              internalShowCurrentBlockAndQuestion($pathToRoot);
+        internalPointsAJAX($pathToRoot);
+        internalShowCurrentBlockAndQuestion($pathToRoot);
     }
 }
 
@@ -872,7 +882,7 @@ function pointsChat($pathToRoot){
 function checkCloserAjax($pathToRoot, $player, $otherPlayer, $rightAnswer)
 {
     echo '
-        <body onload="setTimeout(function(){checkClose()}, 1000)">
+        <body onload="setTimeout(function(){checkClose()}, 3000)">
         <script>
         function checkClose()
         {
@@ -927,7 +937,7 @@ function checkCloserAjax($pathToRoot, $player, $otherPlayer, $rightAnswer)
                     } else if (otherDiff === myDiff) {
                         window.location.href="pointsGiver.php?result=won"
                     } else {
-                        window.location.href="pointsGiver.php?result=ERROR"
+                        window.location.href="pointsGiver.php?result=ERROR - "+ myDiff + " - " + otherDiff + "";
                     }
                   
                 }

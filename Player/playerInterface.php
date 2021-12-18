@@ -24,6 +24,9 @@ openSide("..");
 
 if ($_POST['check'] == "true"){
     $_SESSION['answer'] = $_POST['answer'];
+    $AnswerDir = $root."/Player/AnswerPlayer".$player.".json"; // check if fixed
+    $jArray = ["Answer" => $_POST['answer']];
+    file_put_contents($AnswerDir, json_encode($jArray));
     waitPointsNextPage("..", $player);
     echo "<div class='questionsBlock'>Warte auf den Quizmaster!</div>";
     $_POST['check'] = "false";
@@ -44,11 +47,11 @@ if ($_POST['check'] == "true"){
         checkImage($block, $name, "..");
         echo "<br>";
         echo "<input type='hidden' name='player' value='1'>";
+        $AnswerDir = $root."/Player/AnswerPlayer".$player.".json"; // check if fixed
+        $jArray = [];
+        file_put_contents($AnswerDir, json_encode($jArray));
 
         if ($block == 1) { // Schätzfragen
-            $AnswerDir = $root."/Player/AnswerPlayer".$player.".json"; // check if fixed
-            $jArray = [];
-            file_put_contents($AnswerDir, json_encode($jArray));
             $rightAnswer = $currentArray['Answers']['0'];
             $_SESSION['rightAnswer'] = $currentArray['Answers']['0'];
             echo "<input type='hidden' name='rightAnswer' value='$rightAnswer'>";
