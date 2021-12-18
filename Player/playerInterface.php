@@ -112,7 +112,7 @@ if ($_POST['check'] == "true"){
     } // Wait for Game
     else {
         continueNextPageAJAX("..", $player);
-        echo "<h1>Hi Player! Das Spiel startet gleich.</h1>";
+        echo "<h1>Hi Player ".$player."! Das Spiel startet gleich.</h1>";
     }
 }
 

@@ -413,8 +413,8 @@ function pointsAjax($pathToRoot){
 function internalPointsAJAX($pathToRoot){
     echo '
         <div class ="pointContainer">
-        <div class ="points" id="player1">Spieler 1: 0 Punkte</div>
-        <div class ="points" id="player2">Spieler 1: 0 Punkte</div>
+        <div class ="points" id="player1">Spieler 1 -> Laura: 0 Punkte</div>
+        <div class ="points" id="player2">Spieler 2 -> Katharina: 0 Punkte</div>
         <br><br>
         </div>
         <script>
@@ -425,8 +425,8 @@ function internalPointsAJAX($pathToRoot){
                         let myArrayStr = JSON.parse(this.responseText);
                         let player1 = myArrayStr["Player1"];
                         let player2 = myArrayStr["Player2"];
-                        document.getElementById("player1").innerHTML = "Spieler 1: " + player1 + " Punkte<br>";
-                        document.getElementById("player2").innerHTML = "Spieler 2: " + player2 + " Punkte<br>";
+                        document.getElementById("player1").innerHTML = "Spieler 1 -> Laura: " + player1 + " Punkte<br>";
+                        document.getElementById("player2").innerHTML = "Spieler 2 -> Katharina: " + player2 + " Punkte<br>";
                     }
                 };
                 xhttp.open("GET","'.$pathToRoot.'/Player/playerPoints.json", true);
